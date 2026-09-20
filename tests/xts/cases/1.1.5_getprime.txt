@@ -1,0 +1,32 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.5
+测试名称：getprime
+当前状态：完成 / PASS
+结果摘要：线程正常结束，记录耗时330 ms
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- getprime
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/sched/getprime/
+
+四、原始证据来源
+- xts测试.txt第1387～1395行
+
+六、原始测试记录
+nsh> getprime
+Set thread priority to 10
+Set thread policy to SCHED_RR
+Start thread #0
+thread #0 started, looking for primes < 10000)
+thread #0 finished, found 1230 primes, last o3
+Done
+getprime took 330 msec

@@ -1,0 +1,41 @@
+config EXAMPLES_OK8MP_HTTPS
+	tristate "OK8MP HTTPS and LLM API client"
+	default n
+	depends on CRYPTO_MBEDTLS && NET_TCP && LIBC_NETDB
+	---help---
+		Test DNS, TCP, TLS, HTTPS GET and OpenAI-compatible chat APIs.
+
+if EXAMPLES_OK8MP_HTTPS
+
+config EXAMPLES_OK8MP_HTTPS_PROGNAME
+	string "Program name"
+	default "https_client"
+
+config EXAMPLES_OK8MP_HTTPS_PRIORITY
+	int "Task priority"
+	default 100
+
+config EXAMPLES_OK8MP_HTTPS_STACKSIZE
+	int "Task stack size"
+	default 32768
+
+config EXAMPLES_OK8MP_HTTPS_TIMEOUT
+	int "Socket timeout in seconds"
+	default 30
+
+config EXAMPLES_OK8MP_HTTPS_REQUIRE_TIME
+	bool "Reject TLS when system time is invalid"
+	default y
+	help
+		Require a sane wall clock before certificate validation.  Run the
+		NTP client after networking is configured and before HTTPS.
+
+config EXAMPLES_OK8MP_HTTPS_LOG_PATH
+	string "Default request/response log path"
+	default "/tmp/llm_api.log"
+	help
+		Append HTTPS request metadata and responses to this file.  API keys
+		are never logged.  Set LLM_LOG_PATH=none to disable logging or set it
+		to another writable path at runtime.
+
+endif

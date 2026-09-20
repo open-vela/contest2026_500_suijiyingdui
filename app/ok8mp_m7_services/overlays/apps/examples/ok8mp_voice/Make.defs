@@ -1,0 +1,10 @@
+############################################################################
+# apps/examples/ok8mp_voice/Make.defs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_VOICE),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_voice
+endif

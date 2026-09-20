@@ -1,0 +1,42 @@
+#
+# apps/examples/ok8mp_can_service/Kconfig
+#
+
+config EXAMPLES_OK8MP_CAN_SERVICE
+	tristate "OK8MP M7 shared CAN service"
+	default n
+	depends on CAN && OK8MP_M7_FLEXCAN1
+	---help---
+		Own /dev/can0 in one task, route frames to filtered subscribers,
+		serialize transmission, expose controller statistics and recover a
+		bus-off controller without rebooting M7.
+
+if EXAMPLES_OK8MP_CAN_SERVICE
+
+config EXAMPLES_OK8MP_CAN_SERVICE_PROGNAME
+	string "Program name"
+	default "can_service"
+
+config EXAMPLES_OK8MP_CAN_SERVICE_PRIORITY
+	int "Service task priority"
+	default 110
+
+config EXAMPLES_OK8MP_CAN_SERVICE_STACKSIZE
+	int "Service task stack size"
+	default 4096
+
+config EXAMPLES_OK8MP_CAN_SERVICE_DEVPATH
+	string "CAN device path"
+	default "/dev/can0"
+
+config EXAMPLES_OK8MP_CAN_SERVICE_POLL_MS
+	int "Receive/status poll interval (ms)"
+	default 10
+	range 1 100
+
+config EXAMPLES_OK8MP_CAN_SERVICE_AUTO_RECOVER_MS
+	int "Minimum interval between bus-off recoveries (ms)"
+	default 1000
+	range 100 60000
+
+endif

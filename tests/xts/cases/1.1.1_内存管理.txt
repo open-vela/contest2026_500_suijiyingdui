@@ -1,0 +1,46 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.1
+测试名称：内存管理
+当前状态：完成 / PASS
+结果摘要：CMocka 8项全部通过
+
+一、使用镜像
+- 镜像名称：xts-cmocka
+  文件路径：firmware/xts/xts-cmocka/nuttx.bin
+  文件大小：393504 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：CMocka内存、调度、系统调用及语音驱动测试镜像
+
+二、复现命令
+- cmocka --suite mm_test
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/cmocka/
+- apps/testing/cmocka/cmocka/（CMocka 1.1.5源码）
+
+四、原始证据来源
+- xts测试.txt第2232～2252行
+
+六、原始测试记录
+nsh> cmocka --suite mm_test
+Cmocka Test Start.
+[==========] nuttx_mm_test_suites: Running 8 .
+[ RUN      ] test_nuttx_mm01
+[       OK ] test_nuttx_mm01
+[ RUN      ] test_nuttx_mm02
+[       OK ] test_nuttx_mm02
+[ RUN      ] test_nuttx_mm03
+[       OK ] test_nuttx_mm03
+[ RUN      ] test_nuttx_mm04
+[       OK ] test_nuttx_mm04
+[ RUN      ] test_nuttx_mm05
+[       OK ] test_nuttx_mm05
+[ RUN      ] test_nuttx_mm06
+[       OK ] test_nuttx_mm06
+[ RUN      ] test_nuttx_mm07
+[       OK ] test_nuttx_mm07
+[ RUN      ] test_nuttx_mm08
+[       OK ] test_nuttx_mm08
+[==========] nuttx_mm_test_suites: 8 test(s) .
+[  PASSED  ] 8 test(s).

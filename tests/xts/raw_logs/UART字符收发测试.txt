@@ -1,0 +1,19 @@
+host$ python tools/ok8mp_uart_cmocka.py /dev/cu.usbmodem58BE0307013 -b 115200 -t 10 -l 100
+cmocka_driver_uart -d /dev/ttyS0 -[n 2
+==========] tests: Running 1 test(s).
+[ RUN      ] drivertest_uart
+TURN[1]: PASS (72 bytes)
+TURN[2]: PASS (5 bytes)
+TURN[3]: PASS (3 bytes)
+TURN[4]: PASS (29 bytes)
+TURN[5]: PASS (14 bytes)
+TURN[6]: PASS (69 bytes)
+TURN[7]: PASS (87 bytes)
+TURN[8]: PASS (8 bytes)
+TURN[9]: PASS (8 bytes)
+TURN[10]: PASS (69 bytes)
+[       OK ] drivertest_uart
+[==========] tests: 1 test(s) run.
+[  PASSED  ] 1 test(s).
+nsh> OK8MP UART RX/TX burst test: PASS
+host$

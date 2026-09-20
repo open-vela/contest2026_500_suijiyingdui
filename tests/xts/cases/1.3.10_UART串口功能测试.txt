@@ -1,0 +1,45 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.10
+测试名称：UART串口功能测试
+当前状态：完成 / PASS
+结果摘要：115200波特率下10轮随机长度双向收发全部一致，CMocka 1项通过
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- python tools/ok8mp_uart_cmocka.py /dev/cu.usbmodem58BE0307013 -b 115200 -t 10 -l 100
+
+三、随源码提交或随测试归档的其他文件
+- tools/ok8mp_uart_cmocka.py
+- apps/testing/drivers/drivertest/中的UART测试源码
+- Python依赖：pyserial
+
+四、原始证据来源
+- UART字符收发测试.txt完整记录
+
+六、原始测试记录
+host$ python tools/ok8mp_uart_cmocka.py /dev/cu.usbmodem58BE0307013 -b 115200 -t 10 -l 100
+cmocka_driver_uart -d /dev/ttyS0 -[n 2
+==========] tests: Running 1 test(s).
+[ RUN      ] drivertest_uart
+TURN[1]: PASS (72 bytes)
+TURN[2]: PASS (5 bytes)
+TURN[3]: PASS (3 bytes)
+TURN[4]: PASS (29 bytes)
+TURN[5]: PASS (14 bytes)
+TURN[6]: PASS (69 bytes)
+TURN[7]: PASS (87 bytes)
+TURN[8]: PASS (8 bytes)
+TURN[9]: PASS (8 bytes)
+TURN[10]: PASS (69 bytes)
+[       OK ] drivertest_uart
+[==========] tests: 1 test(s) run.
+[  PASSED  ] 1 test(s).
+nsh> OK8MP UART RX/TX burst test: PASS
+host$

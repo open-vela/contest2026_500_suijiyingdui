@@ -1,0 +1,39 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.9
+测试名称：C++基础测试
+当前状态：完成 / PASS
+结果摘要：helloxx完成动态、实例及静态HelloWorld测试
+
+一、使用镜像
+- 镜像名称：xts-cxx
+  文件路径：firmware/xts/xts-cxx/nuttx.bin
+  文件大小：370012 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：C++基础与容器/RTTI测试镜像
+
+二、复现命令
+- helloxx
+
+三、随源码提交或随测试归档的其他文件
+- apps/examples/helloxx/
+
+四、原始证据来源
+- xts测试.txt第1902～1916行
+
+六、原始测试记录
+nsh> uname -a
+NuttX  0.0.0 28d9404669-dirty Jul 21 2026 14:7
+nsh> free
+      total       used       free    maxused e
+     993240      20344     972896      20712 m
+
+nsh> helloxx
+helloxx_main: Saying hello from the dynamicale
+CHelloWorld::HelloWorld: Hello, World!!
+helloxx_main: Saying hello from the instance k
+CHelloWorld::HelloWorld: Hello, World!!
+helloxx_main: Saying hello from the staticalle
+CHelloWorld::HelloWorld: Hello, World!!
+nsh> cxxtest
+Test std::vector =============================

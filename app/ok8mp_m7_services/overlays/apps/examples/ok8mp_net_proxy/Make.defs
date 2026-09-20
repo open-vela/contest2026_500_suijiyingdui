@@ -1,0 +1,10 @@
+############################################################################
+# apps/examples/ok8mp_net_proxy/Make.defs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_NET_PROXY),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_net_proxy
+endif

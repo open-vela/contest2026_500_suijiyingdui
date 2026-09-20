@@ -1,0 +1,64 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.5
+测试名称：Flash功能测试
+当前状态：完成（PASS）
+测试日期：2026-07-27
+
+一、测试目的
+验证 OK8MP 板载 eMMC 的 FAT 启动分区可被 U-Boot 正确识别，能够枚举分区文件、
+读取 Cortex-M7 NuttX 固件，并将镜像加载至指定 DDR 地址。
+
+二、使用镜像
+- 镜像名称：XTS Crypto 专用测试镜像（ok8mp-m7:xts-crypto）
+  文件路径：firmware/xts/xts-crypto/nuttx.bin
+  文件大小：441248 bytes
+  SHA-256：562005763f87129f9c58c4e65217daa9d21f0d6a17d1764de1c2c23ac5aedb3e
+
+三、实机测试命令
+在 U-Boot 控制台依次执行：
+
+    mmc dev 2
+    fatls mmc 2:1
+    fatload mmc 2:1 0x80000000 nuttx.bin
+    printenv filesize
+    md.l 0x80000000 2
+
+四、判定结果
+- `mmc dev 2` 成功选中 eMMC 设备；
+- `fatls mmc 2:1` 成功列出 FAT 分区内的 Image、DTB 及多个 M7 固件；
+- `fatload` 成功读取 `nuttx.bin` 441248 字节，读取速率为 9.1 MiB/s；
+- `filesize=6bba0`，与 441248 字节一致；
+- DDR 地址 `0x80000000` 处读到初始栈地址 `0x801115c0` 和复位入口
+  `0x80000db5`，镜像向量表有效。
+
+测试结论：PASS。eMMC 启动分区访问、FAT 文件枚举、M7 固件读取及 DDR 加载正常。
+
+五、需要随测试归档的文件
+- `firmware/xts/xts-crypto/nuttx.bin`；
+- `firmware/xts/xts-crypto/defconfig`；
+- `firmware/xts/xts-crypto/SHA256SUMS`；
+- 本文件及 U-Boot 串口截图/日志。
+
+六、原始测试记录
+forlinx=> mmc dev 2
+switch to partitions #0, OK
+mmc2(part 0) is current device
+forlinx=> fatls mmc 2:1
+ 28221952   Image
+    67779   OK8MP-C.dtb
+  1843254   logo-1024x600.bmp
+  3072056   logo-1280x800.bmp
+    99260   forlinx_m7_tcm_firmware
+   441248   nuttx.bin
+   102008   nuttx-openvela.bin
+   320492   xts12h.bin
+
+27 file(s), 0 dir(s)
+
+forlinx=> fatload mmc 2:1 0x80000000 nuttx.bin
+441248 bytes read in 46 ms (9.1 MiB/s)
+forlinx=> printenv filesize
+filesize=6bba0
+forlinx=> md.l 0x80000000 2
+80000000: 801115c0 80000db5

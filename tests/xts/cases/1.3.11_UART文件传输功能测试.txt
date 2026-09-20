@@ -1,0 +1,73 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.11
+测试名称：UART文件传输功能测试
+当前状态：完成 / PASS
+结果摘要：YMODEM Mac→M7传输4096字节成功；M7→Mac回传256字节成功，回传文件MD5与M7端一致。
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- M7端：mount -t tmpfs /tmp
+- M7端：dd if=/dev/urandom of=/tmp/ok8mp_m7_to_mac.bin bs=64 count=4
+- M7端：md5_test -f /tmp/ok8mp_m7_to_mac.bin -c 1
+- Mac端：python tests/xts/tools/ok8mp_ymodem_send.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -s /tmp /tmp/ok8mp_uart_bidirectional.bin
+- Mac端：python tests/xts/tools/ok8mp_ymodem_receive.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -r /tmp/ok8mp_m7_to_mac.bin -o /tmp/ok8mp_uart_rx
+- Mac端：md5 -q /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin
+
+三、随源码提交或随测试归档的其他文件
+- source/apps/system/ymodem/sbrb.py
+- source/apps/system/ymodem/ymodem.c、ymodem.h、rb_main.c、sb_main.c
+- tests/xts/tools/ok8mp_ymodem_send.py（Mac→M7同步发送脚本）
+- tests/xts/tools/ok8mp_ymodem_receive.py（M7→Mac同步接收脚本）
+- 测试文件ok8mp_uart_bidirectional.bin（Mac→M7，4096字节）
+- 测试文件ok8mp_m7_to_mac.bin（M7→Mac，256字节）
+- Python依赖：pyserial（不提交.venv目录）
+
+四、原始证据来源
+- raw_logs/UART文件传输测试.txt
+
+五、注意事项
+- 使用--packet128是因为当前UART4 RX环形缓冲区为256字节，默认1KB突发包会产生NAK。
+- M7→Mac方向由M7发送，Mac端接收缓冲区不受UART4 RX环形缓冲区限制。
+- 主机执行YMODEM脚本前必须退出Minicom，确保串口设备未被其他进程占用。
+
+六、原始测试记录
+M7端：
+nsh> mount -t tmpfs /tmp
+nsh> dd if=/dev/urandom of=/tmp/ok8mp_m7_to_mac.bin bs=64 count=4
+256 bytes (4 blocks) copied
+nsh> ls -l /tmp/ok8mp_m7_to_mac.bin
+ -rwxrwxrwx         256 /tmp/ok8mp_m7_to_mac.bin
+nsh> md5_test -f /tmp/ok8mp_m7_to_mac.bin -c 1
+001: 74a93327fe0b1e8cafe2048736383b7d
+md5_test: PASS (1 identical digest)
+
+Mac→M7：
+host$ md5 -q /tmp/ok8mp_uart_bidirectional.bin
+cb173d86c5bd1cb9e7de1b221bf5a955
+host$ shasum -a 256 /tmp/ok8mp_uart_bidirectional.bin
+75d378f503b4b4668934eee4fefec629e814fdbc9ec7da0f50a63ceb245bcfc2  /tmp/ok8mp_uart_bidirectional.bin
+host$ python tests/xts/tools/ok8mp_ymodem_send.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -s /tmp /tmp/ok8mp_uart_bidirectional.bin
+NSH synchronized
+sending ok8mp_uart_bidirectional.bin (4096 bytes)
+name:ok8mp_uart_bidirectional.bin filesize:4096
+100.0% 4096:4096 left:00h00m00s
+time used:0.4s speed 9.6kB/s
+ all time:0.43s average speed:9.28kB/s
+OK8MP YMODEM send: PASS
+
+M7→Mac：
+host$ python tests/xts/tools/ok8mp_ymodem_receive.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -r /tmp/ok8mp_m7_to_mac.bin -o /tmp/ok8mp_uart_rx
+NSH synchronized
+M7 sb handshake received
+OK8MP YMODEM receive: PASS (/tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin)
+host$ md5 -q /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin
+74a93327fe0b1e8cafe2048736383b7d
+host$ shasum -a 256 /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin
+8fb486d39b672fbe3df83920baf4f8aaf4eda4d0eb629d30f454e4415b4645a6  /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin

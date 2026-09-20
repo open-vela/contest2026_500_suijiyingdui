@@ -1,0 +1,170 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.17
+测试名称：Crypto功能测试
+当前状态：完成（PASS）
+测试日期：2026-07-27
+
+一、测试目的
+验证 OK8MP Cortex-M7 上 NuttX CryptoDev 字符设备及 3DES、AES、HMAC、
+Hash 和 CRC32 算法测试应用能够正常运行。
+
+二、使用镜像
+- 镜像名称：XTS Crypto 专用测试镜像（ok8mp-m7:xts-crypto）
+  文件路径：firmware/xts/xts-crypto/nuttx.bin
+  文件大小：441248 bytes
+  SHA-256：562005763f87129f9c58c4e65217daa9d21f0d6a17d1764de1c2c23ac5aedb3e
+  用途说明：仅用于 XTS 1.3.17 Crypto 功能测试；不替代比赛最终演示镜像。
+
+三、构建配置与随源码归档文件
+- BSP 配置：nuttx/boards/arm/mx8mp/ok8mp-m7/configs/xts-crypto/defconfig
+- Crypto 配置：CONFIG_CRYPTO、CONFIG_CRYPTO_CRYPTODEV、
+  CONFIG_CRYPTO_CRYPTODEV_SOFTWARE_CRYPTO、CONFIG_TESTING_CRYPTO 及各
+  CONFIG_TESTING_CRYPTO_* 测试项。
+- 测试应用源码：apps/testing/drivers/crypto/
+  （3descbc.c、aescbc.c、aesctr.c、aesxts.c、hmac.c、hash.c、crc32.c）。
+- macOS 构建辅助：openvela-ok8mp-xts/.host-tools/kconfig-frontends/ 与
+  openvela-ok8mp-xts/.host-tools/bin/flock。
+
+四、实机测试命令
+在 NSH 中依次执行：
+
+    ls /dev
+    ls /dev/crypto
+    des3cbc
+    aescbc
+    aesctr
+    aesxts
+    hmac
+    hash
+    crc32
+
+五、判定标准与结论
+- /dev/crypto 已成功注册；
+- 3DES-CBC 加密、解密成功；
+- AES-CBC 测试输出 ok；AES-CTR 的 9 组向量均为 OK；
+- AES-XTS 的 14 组加密、解密向量均为 OK；
+- HMAC 的 MD5、SHA-1、SHA-256 均成功；
+- Hash 的 MD5、SHA-1、SHA-224、SHA-256、SHA-512，以及大块数据和非对齐
+  缓冲区测试均成功；
+- CRC32 的 8 个测试用例均成功。
+
+测试结论：PASS。NuttX CryptoDev 软件密码学功能正常，满足 XTS 1.3.17
+Crypto 功能测试的算法运行要求。
+
+说明：本项验证的是 NuttX 软件 CryptoDev 后端及算法实现；未将其表述为
+i.MX8MP CAAM 硬件加速验证。
+
+六、原始测试记录
+nsh> ls /dev
+/dev:
+ console
+ crypto
+ i2c3
+ null
+ ttyS0
+ urandom
+ usensor
+ userleds
+ voicesensor0
+ zero
+nsh> ls /dev/crypto
+ /dev/crypto
+nsh> des3cbc
+ok, encrypt with /dev/crypto, decrypt with /dev/crypto
+nsh> aescbc
+aescbc test ok
+nsh> aesctr
+OK test vector 0
+OK test vector 1
+OK test vector 2
+OK test vector 3
+OK test vector 4
+OK test vector 5
+OK test vector 6
+OK test vector 7
+OK test vector 8
+nsh> aesxts
+OK encrypt test vector 0
+OK decrypt test vector 0
+OK encrypt test vector 1
+OK decrypt test vector 1
+OK encrypt test vector 2
+OK decrypt test vector 2
+OK encrypt test vector 3
+OK decrypt test vector 3
+OK encrypt test vector 4
+OK decrypt test vector 4
+OK encrypt test vector 5
+OK decrypt test vector 5
+OK encrypt test vector 6
+OK decrypt test vector 6
+OK encrypt test vector 7
+OK decrypt test vector 7
+OK encrypt test vector 8
+OK decrypt test vector 8
+OK encrypt test vector 9
+OK decrypt test vector 9
+OK encrypt test vector 10
+OK decrypt test vector 10
+OK encrypt test vector 11
+OK decrypt test vector 11
+OK encrypt test vector 12
+OK decrypt test vector 12
+OK encrypt test vector 13
+OK decrypt test vector 13
+nsh> hmac
+hmac md5 success
+hmac md5 success
+hmac md5 success
+hmac md5 success
+hmac md5 success
+hmac sha1 success
+hmac sha1 success
+hmac sha1 success
+hmac sha1 success
+hmac sha1 success
+hmac sha256 success
+hmac sha256 success
+hmac sha256 success
+hmac sha256 success
+hmac sha256 success
+nsh> hash
+hash md5 success
+hash md5 success
+hash md5 success
+hash md5 success
+hash md5 success
+hash md5 success
+hash md5 success
+hash sha1 success
+hash sha1 success
+hash sha1 success
+hash sha224 success
+hash sha224 success
+hash sha224 success
+hash sha256 success
+hash sha256 success
+hash sha256 success
+hash sha512 success
+hash sha512 success
+hash sha512 success
+md5 huge block test success
+sha1 huge block test success
+sha224 huge block test success
+sha256 huge block test success
+sha512 huge block test success
+md5 unaligned buffer size match success
+sha1 unaligned buffer size match success
+sha244 unaligned buffer size match success
+sha256 unaligned buffer size match success
+sha512 unaligned buffer size match success
+nsh> crc32
+crc32 test case 1 success
+crc32 test case 2 success
+crc32 test case 3 success
+crc32 test case 4 success
+crc32 test case 5 success
+crc32 test case 6 success
+crc32 test case 7 success
+crc32 test case 8 success

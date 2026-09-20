@@ -1,0 +1,30 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.13
+测试名称：C++功能测试
+当前状态：完成 / PASS
+结果摘要：std::vector、std::map、RTTI和继承测试正常
+
+一、使用镜像
+- 镜像名称：xts-cxx
+  文件路径：firmware/xts/xts-cxx/nuttx.bin
+  文件大小：370012 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：C++基础与容器/RTTI测试镜像
+
+二、复现命令
+- cxxtest
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/cxx/cxxtest/
+
+四、原始证据来源
+- xts测试.txt第1917～1923行
+
+六、原始测试记录
+v1=1 2 3
+s1=Hello, World!
+Hello World Good Luck
+Test std::map ===============================
+Test RTTI =============================
+extend

@@ -1,0 +1,63 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.2
+测试名称：系统调度
+当前状态：完成 / PASS
+结果摘要：CMocka 16项全部通过
+
+一、使用镜像
+- 镜像名称：xts-cmocka
+  文件路径：firmware/xts/xts-cmocka/nuttx.bin
+  文件大小：393504 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：CMocka内存、调度、系统调用及语音驱动测试镜像
+
+二、复现命令
+- cmocka --suite sched_test
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/cmocka/
+- apps/testing/cmocka/cmocka/（CMocka 1.1.5源码）
+
+四、原始证据来源
+- xts测试.txt第2257～2294行
+
+六、原始测试记录
+nsh> cmocka --suite sched_test
+Cmocka Test Start.
+[==========] nuttx_sched_test_suites: Running.
+[ RUN      ] test_nuttx_sched_pthread01
+[       OK ] test_nuttx_sched_pthread01
+[ RUN      ] test_nuttx_sched_pthread02
+[       OK ] test_nuttx_sched_pthread02
+[ RUN      ] test_nuttx_sched_pthread03
+[       OK ] test_nuttx_sched_pthread03
+[ RUN      ] test_nuttx_sched_pthread04
+[       OK ] test_nuttx_sched_pthread04
+[ RUN      ] test_nuttx_sched_pthread05
+[       OK ] test_nuttx_sched_pthread05
+[ RUN      ] test_nuttx_sched_pthread06
+[       OK ] test_nuttx_sched_pthread06
+[ RUN      ] test_nuttx_sched_pthread07
+[       OK ] test_nuttx_sched_pthread07
+[ RUN      ] test_nuttx_sched_pthread08
+[       OK ] test_nuttx_sched_pthread08
+[ RUN      ] test_nuttx_sched_pthread09
+[       OK ] test_nuttx_sched_pthread09
+[ RUN      ] test_nuttx_sched_task01
+[       OK ] test_nuttx_sched_task01
+[ RUN      ] test_nuttx_sched_task02
+[       OK ] test_nuttx_sched_task02
+[ RUN      ] test_nuttx_sched_task03
+[       OK ] test_nuttx_sched_task03
+[ RUN      ] test_nuttx_sched_task04
+[test_nuttx_sched_task04]:scheduling policy i!
+[       OK ] test_nuttx_sched_task04
+[ RUN      ] test_nuttx_sched_task05
+[       OK ] test_nuttx_sched_task05
+[ RUN      ] test_nuttx_sched_task06
+[       OK ] test_nuttx_sched_task06
+[ RUN      ] test_nuttx_sched_task07
+[       OK ] test_nuttx_sched_task07
+[==========] nuttx_sched_test_suites: 16 test.
+[  PASSED  ] 16 test(s).

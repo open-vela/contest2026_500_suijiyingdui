@@ -1,0 +1,82 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.2.1
+测试名称：Reboot启动异常测试
+当前状态：完成（PASS）
+测试日期：2026-07-27
+结果摘要：NSH执行reboot后，M7重新完成板级初始化并返回新的NSH提示符；
+          全程未进行人工断电，未出现boardctl错误或HardFault。
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-crypto/nuttx.bin
+  文件大小：411024 bytes
+  SHA-256：d202fbeeffe6e59ac8cb13c169479d7ec9be4fa2f35763c86c6fca4fd8cf2049
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像。
+
+二、测试命令（均在NSH中执行）
+1. 记录复位前系统状态：
+   date -u
+   free
+   echo REBOOT_TEST_BEGIN
+2. 触发系统重启：
+   reboot
+3. 重新出现NSH后检查交互：
+   echo REBOOT_RECOVERY_OK
+   free
+   help
+
+三、随源码提交或随测试归档的其他文件
+- nuttx/boards/arm/mx8mp/ok8mp-m7/src/mx8mp_bringup.c
+  用途：提供OK8MP板级board_reset()实现。
+- nuttx/boards/arm/mx8mp/ok8mp-m7/目录
+  用途：BSP、Kconfig、defconfig、链接脚本及板级初始化。
+- nuttx.bin
+  用途：本次测试使用的可执行镜像，不能替代对应源代码。
+- 本测试记录及完整串口日志。
+
+四、实现与问题修复
+1. 初始版本虽然编译了NSH reboot命令，但没有可用的OK8MP板级复位实现，
+   实机返回“boardctl failed: 2”，系统没有发生复位。
+2. 首次板级实现尝试使用WDOG1。M7写WDOG1时钟门控地址0x30384530时触发
+   CFSR=0x00000400的不精确数据总线错误，说明WDOG1属于A核/系统侧资源，
+   不能直接作为M7复位通道。
+3. 最终实现改用NXP为i.MX8MP Cortex-M7配置的WDOG3：
+   - 开启CCM_WDOG3_CLK_GATE；
+   - 配置SRC_M7RCR中的WDOG3复位路由；
+   - 清除WDOG3 WCR[SRS]，触发软件复位；
+   - 复位后重新执行OK8MP板级初始化并进入NSH。
+
+五、判定依据与注意事项
+- reboot命令执行后原NSH会话终止，随后重新出现语音模块I2C探测信息、
+  NuttShell启动横幅和新的nsh>提示符，证明M7已重新启动。
+- 本轮没有按电源键，也没有在U-Boot中手工执行bootaux，因此不是将人工冷启动
+  误记为Reboot。
+- 串口中“reboot”后的异常字符是复位瞬间UART输出交叠造成的显示现象，不影响
+  复位结果。
+- 本记录证明的是openvela/NuttX在M7侧的软件Reboot；Cold Boot另按1.2.2记录，
+  10次Reboot平均启动时间另按2.1.4记录。
+- 后续归档完整日志时，可补充REBOOT_RECOVERY_OK、free和help输出，使恢复后的
+  功能证据更加完整。
+
+六、原始测试记录
+nsh> date -u
+Sun, Jul 26 19:36:14 2026
+nsh> free
+      total       used       free    maxused
+   15670840      19368   15651472      19792
+nsh> echo REBOOT_TEST_BEGIN
+REBOOT_TEST_BEGIN
+nsh> reboot
+OK8MP voice: I2C3 probe addr=0x0f
+
+NuttShell (NSH)
+nsh>
+
+七、测试结论
+1. reboot命令能够触发OK8MP Cortex-M7软件复位。
+2. 复位后板级I2C语音模块重新完成探测。
+3. openvela/NuttX重新启动并恢复NSH交互。
+4. 未出现boardctl failed、Bus Fault、HardFault或人工电源重启。
+
+最终判定：1.2.1 Reboot启动异常测试 PASS。

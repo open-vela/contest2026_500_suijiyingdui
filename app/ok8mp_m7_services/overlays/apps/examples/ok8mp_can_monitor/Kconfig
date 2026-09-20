@@ -1,0 +1,58 @@
+#
+# apps/examples/ok8mp_can_monitor/Kconfig
+#
+
+config EXAMPLES_OK8MP_CAN_MONITOR
+	tristate "OK8MP M7 CAN health monitor"
+	default n
+	depends on CAN && EXAMPLES_OK8MP_CAN_SERVICE
+	---help---
+		Run a persistent monitor for a periodic classic-CAN status frame.
+		The monitor checks the expected standard identifier, frame period,
+		16-bit sequence counter and reception timeout.  It is started from
+		NSH and does not access the CAN peripheral during board boot.
+
+if EXAMPLES_OK8MP_CAN_MONITOR
+
+config EXAMPLES_OK8MP_CAN_MONITOR_PROGNAME
+	string "Program name"
+	default "can_monitor"
+
+config EXAMPLES_OK8MP_CAN_MONITOR_PRIORITY
+	int "Monitor task priority"
+	default 100
+
+config EXAMPLES_OK8MP_CAN_MONITOR_STACKSIZE
+	int "Monitor task stack size"
+	default 3072
+
+config EXAMPLES_OK8MP_CAN_MONITOR_DEVPATH
+	string "CAN device path"
+	default "/dev/can0"
+
+config EXAMPLES_OK8MP_CAN_MONITOR_EXPECTED_ID
+	hex "Expected standard CAN identifier"
+	default 0x180
+	range 0x0 0x7ff
+
+config EXAMPLES_OK8MP_CAN_MONITOR_EXPECTED_PERIOD_MS
+	int "Expected status-frame period (ms)"
+	default 1000
+	range 10 60000
+
+config EXAMPLES_OK8MP_CAN_MONITOR_PERIOD_TOLERANCE_MS
+	int "Allowed period deviation (ms)"
+	default 400
+	range 0 60000
+
+config EXAMPLES_OK8MP_CAN_MONITOR_TIMEOUT_MS
+	int "ECU reception timeout (ms)"
+	default 3000
+	range 100 600000
+
+config EXAMPLES_OK8MP_CAN_MONITOR_POLL_MS
+	int "CAN poll interval (ms)"
+	default 100
+	range 10 1000
+
+endif

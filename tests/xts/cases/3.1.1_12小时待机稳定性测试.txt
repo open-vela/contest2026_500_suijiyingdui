@@ -1,0 +1,30 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：3.1.1
+测试名称：12小时待机稳定性测试
+当前状态：已有长时间日志；需按官方条件重测或申请偏差
+结果摘要：已有长时间运行记录，但当前日志出现NTP_daemon，且补测配置未启用KASAN/show_info
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- 测试起点记录date -u、uname -a、free、ps；之后定期重复；12小时后记录结束状态
+
+三、随源码提交或随测试归档的其他文件
+- stability_12h.log（必须作为测试附件提交）
+
+四、原始证据来源
+- 操作系统大赛/stability_12h.log完整记录
+
+五、注意事项
+- 官方条件是未配网、开启CONFIG_MM_KASAN和LOW_RESOURCE_TEST/show_info后静置12小时。
+- 现有日志出现NTP_daemon，说明不是严格未配网；xts-remaining配置中也未发现CONFIG_MM_KASAN。
+- 日志后部混入mm、MD5、RAM块设备等后续测试输出，应重测并保存纯净起止区间，或向官方申请测试偏差。
+
+六、原始测试记录
+当前没有可抽取的逐行原始日志，详见状态及注意事项。

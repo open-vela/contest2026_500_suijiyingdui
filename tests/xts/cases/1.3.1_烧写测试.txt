@@ -1,0 +1,71 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.1
+测试名称：烧写测试
+当前状态：完成
+结果摘要：nuttx.bin可由U-Boot加载并启动，正常进入NSH
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- mmc dev 2
+- fatload mmc 2:1 0x80000000 nuttx.bin
+- bootaux 0x80000000
+
+三、随源码提交或随测试归档的其他文件
+- nuttx/boards/arm/mx8mp/ok8mp-m7/（BSP、Kconfig、defconfig、链接脚本及板级初始化）
+- 对应测试镜像nuttx.bin（发布/复现附件，不替代源码）
+
+四、原始证据来源
+- xts测试.txt开头的NSH、uname及设备节点记录
+
+六、原始测试记录
+nsh> help
+help usage:  help [-v] [<cmd>]
+
+    .           cp          expr        mkdir
+    [           cmp         false       mkfif
+    ?           dirname     fdinfo      mkrd
+    addroute    date        free        mount
+    alias       delroute    help        mv
+    unalias     df          hexdump     nsloo
+    arp         dmesg       ifconfig    pidof
+    basename    echo        ifdown      print
+    break       env         ifup        ps
+    cat         exec        ln          pwd
+    cd          exit        ls          readl
+
+Builtin Apps:
+    dd               net_proxy        ping
+    fstest           nsh              pipe
+    getprime         ntpcstart        popen
+    gpio_test        ntpcstatus       ramtest
+    hello            ntpcstop         renew
+    i2c              ostest           scanfte
+nsh> uname -a
+NuttX  0.0.0 28d9404669-dirty Jul 21 2026 13:7
+nsh> free
+      total       used       free    maxused e
+     993872      20408     973464      20776 m
+nsh> df
+  Block    Number
+  Size     Blocks       Used   Available Mounn
+   512          1          1           0 /data
+     0          0          0           0 /proc
+nsh> ls /dev
+/dev:
+ console
+ i2c3
+ null
+ ttyS0
+ urandom
+ usensor
+ userleds
+ voicesensor0
+ zero
+nsh> hello

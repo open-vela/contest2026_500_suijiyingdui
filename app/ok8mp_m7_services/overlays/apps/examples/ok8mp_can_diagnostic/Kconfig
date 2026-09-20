@@ -1,0 +1,40 @@
+#
+# apps/examples/ok8mp_can_diagnostic/Kconfig
+#
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC
+	tristate "OK8MP M7 CAN active diagnostic"
+	default n
+	depends on CAN && EXAMPLES_OK8MP_CAN_SERVICE
+	---help---
+		Send one project-defined classic-CAN diagnostic request and wait for
+		the simulated ECU response.  The shared can_service routes the reply
+		to this command without pausing the periodic health monitor.  It does
+		not access CAN during board boot.
+
+if EXAMPLES_OK8MP_CAN_DIAGNOSTIC
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC_PROGNAME
+	string "Program name"
+	default "can_diagnostic"
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC_DEVPATH
+	string "CAN device path"
+	default "/dev/can0"
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC_REQUEST_ID
+	hex "Diagnostic request standard CAN identifier"
+	default 0x700
+	range 0x0 0x7ff
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC_RESPONSE_ID
+	hex "Diagnostic response standard CAN identifier"
+	default 0x708
+	range 0x0 0x7ff
+
+config EXAMPLES_OK8MP_CAN_DIAGNOSTIC_TIMEOUT_MS
+	int "ECU response timeout (ms)"
+	default 1000
+	range 100 10000
+
+endif

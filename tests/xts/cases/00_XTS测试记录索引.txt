@@ -1,0 +1,78 @@
+openvela OK8MP Cortex-M7 XTS测试记录索引
+================================================================
+
+说明：
+1. 原始xts测试.txt及既有独立日志均保留，不删除、不覆盖。
+2. 每个官方用例对应一个独立UTF-8文本文件。
+3. 文件开头记录测试镜像、大小、SHA-256及需要提交/归档的辅助文件。
+4. 标记“待补算”的镜像摘要应在云端占位文件下载到本机后执行shasum -a 256补齐。
+5. .venv-uart虚拟环境不应提交；只提交Python脚本及依赖说明。
+
+镜像总表：
+- xts-basic
+  路径：firmware/xts/xts-basic/nuttx.bin
+  大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+- xts-cmocka
+  路径：firmware/xts/xts-cmocka/nuttx.bin
+  大小：393504 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+- xts-cxx
+  路径：firmware/xts/xts-cxx/nuttx.bin
+  大小：370012 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+- xts-nist
+  路径：firmware/xts/xts-nist/nuttx.bin
+  大小：371332 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+- xts-remaining
+  路径：firmware/xts/xts-remaining/nuttx.bin
+  大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+- 比赛最终版本
+  路径：firmware/competition/nuttx.bin
+  大小：544128 bytes
+  SHA-256：02ffb2a7ad8ee94da7542b1ca41b369f566e047fe90051331de3078667f73a2d
+
+用例文件：
+- 1.1.1 内存管理 | 完成 / PASS | 1.1.1_内存管理.txt
+- 1.1.2 系统调度 | 完成 / PASS | 1.1.2_系统调度.txt
+- 1.1.3 系统调用 | 完成 / PASS | 1.1.3_系统调用.txt
+- 1.1.4 ostest | 完成 / PASS | 1.1.4_ostest.txt
+- 1.1.5 getprime | 完成 / PASS | 1.1.5_getprime.txt
+- 1.1.6 Kernel-mm内存测试 | 完成 / PASS | 1.1.6_Kernel-mm内存测试.txt
+- 1.1.7 scanftest | 完成 / PASS | 1.1.7_scanftest.txt
+- 1.1.8 C语言基础测试 | 完成 / PASS | 1.1.8_C语言基础测试.txt
+- 1.1.9 C++基础测试 | 完成 / PASS | 1.1.9_CPP基础测试.txt
+- 1.1.10 popen | 完成 / PASS | 1.1.10_popen.txt
+- 1.1.11 pipe | 完成 / PASS | 1.1.11_pipe.txt
+- 1.1.12 Kernel-md5值测试 | 完成 / PASS | 1.1.12_Kernel-md5值测试.txt
+- 1.1.13 C++功能测试 | 完成 / PASS | 1.1.13_CPP功能测试.txt
+- 1.2.1 Reboot启动异常测试 | 待完成（当前镜像复位接口不可用） | 1.2.1_Reboot启动异常测试.txt
+- 1.2.2 Cold boot启动异常测试 | 完成（汇总结论） | 1.2.2_Cold boot启动异常测试.txt
+- 1.2.3 RAM统计 | 完成 | 1.2.3_RAM统计.txt
+- 1.2.4 Flash资源统计 | 部分完成（需补硬件Flash占用说明） | 1.2.4_Flash资源统计.txt
+- 1.3.1 烧写测试 | 完成 | 1.3.1_烧写测试.txt
+- 1.3.2 RAM文件系统读写 | 完成 / PASS | 1.3.2_RAM文件系统读写.txt
+- 1.3.3 RAM读写测试 | 完成 / PASS | 1.3.3_RAM读写测试.txt
+- 1.3.4 RAM随机块设备读写 | 完成 / PASS | 1.3.4_RAM随机块设备读写.txt
+- 1.3.5 Flash功能测试 | N/A申请待官方确认 | 1.3.5_Flash功能测试.txt
+- 1.3.6 GPIO功能测试 | 等效硬件验证完成；官方CMocka回环待补或确认替代 | 1.3.6_GPIO功能测试.txt
+- 1.3.7 I2C功能测试及语音外设 | 完成 / PASS | 1.3.7_I2C功能测试及语音外设.txt
+- 1.3.10 UART串口功能测试 | 完成 / PASS | 1.3.10_UART串口功能测试.txt
+- 1.3.11 UART文件传输功能测试 | 完成 / PASS（Mac→M7与M7→Mac） | 1.3.11_UART文件传输功能测试.txt
+- 1.3.12 RTC时钟功能测试 | N/A申请待官方确认 | 1.3.12_RTC时钟功能测试.txt
+- 1.3.13 Timer定时器功能测试 | 基础功能完成；官方驱动CMocka待补 | 1.3.13_Timer定时器功能测试.txt
+- 1.3.14 时间一致性测试 | 完成（汇总结论，证据需独立归档） | 1.3.14_时间一致性测试.txt
+- 1.3.15 Watchdog测试 | N/A申请待官方确认 | 1.3.15_Watchdog测试.txt
+- 1.3.16 RNG功能测试 | 完成 / PASS | 1.3.16_RNG功能测试.txt
+- 1.3.17 Crypto功能测试 | 未完成官方用例（TLS链路已验证） | 1.3.17_Crypto功能测试.txt
+- 2.1.3 Cold Boot启动时间测试 | 完成 / PASS | 2.1.3_Cold Boot启动时间测试.txt
+- 2.1.4 Reboot启动时间测试 | U-Boot reset 10次平均达标；官方NSH reboot待完成 | 2.1.4_Reboot启动时间测试.txt
+- 3.1.1 12小时待机稳定性测试 | 已有长时间日志；需按官方条件重测或申请偏差 | 3.1.1_12小时待机稳定性测试.txt
+
+建议提交的主机端辅助工具：
+- openvela-ok8mp-xts/tools/ok8mp_uart_cmocka.py
+- openvela-ok8mp-xts/tools/run_sbrb_timeout.py
+- openvela-ok8mp-xts/apps/system/ymodem/sbrb.py（包含--packet128）
+- openvela-ok8mp-xts/XTS_REMAINING_TEST_GUIDE.md

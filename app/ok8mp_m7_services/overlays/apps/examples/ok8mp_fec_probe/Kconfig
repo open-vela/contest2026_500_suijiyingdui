@@ -1,0 +1,22 @@
+config EXAMPLES_OK8MP_FEC_PROBE
+	tristate "OK8MP M7 FEC PHY probe"
+	default n
+	help
+		Build the fec_probe command.  It reads the YT8521 PHY through the
+		OK8MP ENET1/FEC MDIO interface without starting the network stack.
+
+if EXAMPLES_OK8MP_FEC_PROBE
+
+config EXAMPLES_OK8MP_FEC_PROBE_PROGNAME
+	string "Program name"
+	default "fec_probe"
+
+config EXAMPLES_OK8MP_FEC_PROBE_PRIORITY
+	int "FEC probe task priority"
+	default 100
+
+config EXAMPLES_OK8MP_FEC_PROBE_STACKSIZE
+	int "FEC probe stack size"
+	default DEFAULT_TASK_STACKSIZE
+
+endif

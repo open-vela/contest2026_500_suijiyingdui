@@ -1,0 +1,47 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.10
+测试名称：popen
+当前状态：完成 / PASS
+结果摘要：popen(help)读取完成并正常执行pclose()
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- popen
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/libc/popen/
+- apps/system/popen/
+
+四、原始证据来源
+- xts测试.txt第1758～1780行
+
+六、原始测试记录
+nsh> popen
+Calling popen("help")
+help usage:  help [-v] [<cmd>]
+
+    .           cp          expr        mkdir
+    [           cmp         false       mkfif
+    ?           dirname     fdinfo      mkrd
+    addroute    datesg       ifconfig    pido
+    basename    echo        ifdown      print
+    break       env         ifup        ps
+    cat         exec        ln          pwd
+    cd          exit        ls          readl
+
+Builtin Apps:
+    dd               net_proxy        ping
+    fstest           nsh              pipe
+    getprime         ntpcstart        popen
+    gpio_test        ntpcstatus       ramtest
+    hello            ntpcstop         renew
+    i2c              ostest           scanfte
+End of data
+Calling pclose()

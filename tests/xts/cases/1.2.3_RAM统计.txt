@@ -1,0 +1,31 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.2.3
+测试名称：RAM统计
+当前状态：完成
+结果摘要：free命令记录总量、已用、空闲及峰值
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- free
+
+三、随源码提交或随测试归档的其他文件
+- nuttx/boards/arm/mx8mp/ok8mp-m7/（BSP、Kconfig、defconfig、链接脚本及板级初始化）
+- 对应测试镜像nuttx.bin（发布/复现附件，不替代源码）
+
+四、原始证据来源
+- xts测试.txt第23～28行
+
+六、原始测试记录
+nsh> uname -a
+NuttX  0.0.0 28d9404669-dirty Jul 21 2026 13:7
+nsh> free
+      total       used       free    maxused e
+     993872      20408     973464      20776 m
+nsh> df

@@ -1,0 +1,7 @@
+############################################################################
+# apps/examples/ok8mp_can_service/Make.defs
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_CAN_SERVICE),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_can_service
+endif

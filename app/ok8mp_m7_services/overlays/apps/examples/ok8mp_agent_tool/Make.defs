@@ -1,0 +1,3 @@
+ifneq ($(CONFIG_EXAMPLES_OK8MP_AGENT_TOOL),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_agent_tool
+endif

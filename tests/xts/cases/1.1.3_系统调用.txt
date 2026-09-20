@@ -1,0 +1,210 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.3
+测试名称：系统调用
+当前状态：完成 / PASS
+结果摘要：CMocka 83项全部通过
+
+一、使用镜像
+- 镜像名称：xts-cmocka
+  文件路径：firmware/xts/xts-cmocka/nuttx.bin
+  文件大小：393504 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：CMocka内存、调度、系统调用及语音驱动测试镜像
+
+二、复现命令
+- cmocka --suite syscall_test
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/cmocka/
+- apps/testing/cmocka/cmocka/（CMocka 1.1.5源码）
+
+四、原始证据来源
+- xts测试.txt第2297～2478行
+
+五、注意事项
+- 日志中的非法文件描述符、非法协议参数属于负向用例；最终[OK]表示内核正确拒绝。
+
+六、原始测试记录
+nsh> cmocka --suite syscall_test
+Cmocka Test Start.
+[==========] nuttx_syscall_test_suites: Runni.
+[ RUN      ] test_nuttx_syscall_chdir01
+[       OK ] test_nuttx_syscall_chdir01
+[ RUN      ] test_nuttx_syscall_chdir02
+[       OK ] test_nuttx_syscall_chdir02
+[ RUN      ] test_nuttx_syscall_getitimer01
+[       OK ] test_nuttx_syscall_getitimer01
+[ RUN      ] test_nuttx_syscall_clockgettime01
+[       OK ] test_nuttx_syscall_clockgettime01
+[ RUN      ] test_nuttx_syscall_clocknanoslee1
+[       OK ] test_nuttx_syscall_clocknanoslee1
+[ RUN      ] test_nuttx_syscall_clocksettime01
+[       OK ] test_nuttx_syscall_clocksettime01
+[ RUN      ] test_nuttx_syscall_close01
+[       OK ] test_nuttx_syscall_close01
+[ RUN      ] test_nuttx_syscall_close02
+[       OK ] test_nuttx_syscall_close02
+[ RUN      ] test_nuttx_syscall_close03
+[       OK ] test_nuttx_syscall_close03
+[ RUN      ] test_nuttx_syscall_creat01
+[       OK ] test_nuttx_syscall_creat01
+[ RUN      ] test_nuttx_syscall_creat02
+[       OK ] test_nuttx_syscall_creat02
+[ RUN      ] test_nuttx_syscall_fcntl02
+[       OK ] test_nuttx_syscall_fcntl02
+[ RUN      ] test_nuttx_syscall_fcntl03
+[       OK ] test_nuttx_syscall_fcntl03
+[ RUN      ] test_nuttx_syscall_fcntl04
+[       OK ] test_nuttx_syscall_fcntl04
+[ RUN      ] test_nuttx_syscall_fcntl06
+[       OK ] test_nuttx_syscall_fcntl06
+[ RUN      ] test_nuttx_syscall_fstatfs01
+[       OK ] test_nuttx_syscall_fstatfs01
+[ RUN      ] test_nuttx_syscall_fsync01
+[       OK ] test_nuttx_syscall_fsync01
+[ RUN      ] test_nuttx_syscall_fsync02
+[       OK ] test_nuttx_syscall_fsync02
+[ RUN      ] test_nuttx_syscall_fsync03
+[       OK ] test_nuttx_syscall_fsync03
+[ RUN      ] test_nuttx_syscall_getpeername01
+[       OK ] test_nuttx_syscall_getpeername01
+[ RUN      ] test_nuttx_syscall_getsockopt01
+[       OK ] test_nuttx_syscall_getsockopt01
+[ RUN      ] test_nuttx_syscall_setsockopt01
+[       OK ] test_nuttx_syscall_setsockopt01
+[ RUN      ] test_nuttx_syscall_listen01
+listen(-400, 0) failed
+bad file descriptor successful
+listen(3, 0) failed
+not a socket successful
+listen(4, 0) failed
+UDP listen successful
+[       OK ] test_nuttx_syscall_listen01
+[ RUN      ] test_nuttx_syscall_socketpair02
+[       OK ] test_nuttx_syscall_socketpair02
+[ RUN      ] test_nuttx_syscall_ftruncate01
+[       OK ] test_nuttx_syscall_ftruncate01
+[ RUN      ] test_nuttx_syscall_getcwd01
+[       OK ] test_nuttx_syscall_getcwd01
+[ RUN      ] test_nuttx_syscall_getcwd02
+[       OK ] test_nuttx_syscall_getcwd02
+[ RUN      ] test_nuttx_syscall_getpid01
+[       OK ] test_nuttx_syscall_getpid01
+[ RUN      ] test_nuttx_syscall_getppid01
+[       OK ] test_nuttx_syscall_getppid01
+[ RUN      ] test_nuttx_syscall_gethostname01
+[       OK ] test_nuttx_syscall_gethostname01
+[ RUN      ] test_nuttx_syscall_gettimeofday01
+[       OK ] test_nuttx_syscall_gettimeofday01
+[ RUN      ] test_nuttx_syscall_lseek01
+[       OK ] test_nuttx_syscall_lseek01
+[ RUN      ] test_nuttx_syscall_lseek07
+[       OK ] test_nuttx_syscall_lseek07
+[ RUN      ] test_nuttx_syscall_lstat01
+[       OK ] test_nuttx_syscall_lstat01
+[ RUN      ] test_nuttx_syscall_dup01
+[       OK ] test_nuttx_syscall_dup01
+[ RUN      ] test_nuttx_syscall_dup02
+[       OK ] test_nuttx_syscall_dup02
+[ RUN      ] test_nuttx_syscall_dup03
+[       OK ] test_nuttx_syscall_dup03
+[ RUN      ] test_nuttx_syscall_dup04
+[       OK ] test_nuttx_syscall_dup04
+[ RUN      ] test_nuttx_syscall_dup05
+[       OK ] test_nuttx_syscall_dup05
+[ RUN      ] test_nuttx_syscall_dup201
+[       OK ] test_nuttx_syscall_dup201
+[ RUN      ] test_nuttx_syscall_dup202
+[       OK ] test_nuttx_syscall_dup202
+[ RUN      ] test_nuttx_syscall_fpathconf01
+[       OK ] test_nuttx_syscall_fpathconf01
+[ RUN      ] test_nuttx_syscall_getegid01
+[       OK ] test_nuttx_syscall_getegid01
+[ RUN      ] test_nuttx_syscall_getegid02
+[       OK ] test_nuttx_syscall_getegid02
+[ RUN      ] test_nuttx_syscall_geteuid01
+[       OK ] test_nuttx_syscall_geteuid01
+[ RUN      ] test_nuttx_syscall_getgid01
+[       OK ] test_nuttx_syscall_getgid01
+[ RUN      ] test_nuttx_syscall_getgid02
+[       OK ] test_nuttx_syscall_getgid02
+[ RUN      ] test_nuttx_syscall_getuid01
+[       OK ] test_nuttx_syscall_getuid01
+[ RUN      ] test_nuttx_syscall_pathconf01
+[       OK ] test_nuttx_syscall_pathconf01
+[ RUN      ] test_nuttx_syscall_pipe01
+[       OK ] test_nuttx_syscall_pipe01
+[ RUN      ] test_nuttx_syscall_pipe02
+[       OK ] test_nuttx_syscall_pipe02
+[ RUN      ] test_nuttx_syscall_pread01
+[       OK ] test_nuttx_syscall_pread01
+[ RUN      ] test_nuttx_syscall_pwrite01
+[       OK ] test_nuttx_syscall_pwrite01
+[ RUN      ] test_nuttx_syscall_pwrite02
+[       OK ] test_nuttx_syscall_pwrite02
+[ RUN      ] test_nuttx_syscall_rmdir01
+[       OK ] test_nuttx_syscall_rmdir01
+[ RUN      ] test_nuttx_syscall_rmdir02
+[       OK ] test_nuttx_syscall_rmdir02
+[ RUN      ] test_nuttx_syscall_truncate01
+[       OK ] test_nuttx_syscall_truncate01
+[ RUN      ] test_nuttx_syscall_unlink01
+[       OK ] test_nuttx_syscall_unlink01
+[ RUN      ] test_nuttx_syscall_nansleep01
+[       OK ] test_nuttx_syscall_nansleep01
+[ RUN      ] test_nuttx_syscall_nansleep02
+[       OK ] test_nuttx_syscall_nansleep02
+[ RUN      ] test_nuttx_syscall_time01
+[       OK ] test_nuttx_syscall_time01
+[ RUN      ] test_nuttx_syscall_time02
+[       OK ] test_nuttx_syscall_time02
+[ RUN      ] test_nuttx_syscall_timercreate01
+[       OK ] test_nuttx_syscall_timercreate01
+[ RUN      ] test_nuttx_syscall_timerdelete01
+[       OK ] test_nuttx_syscall_timerdelete01
+[ RUN      ] test_nuttx_syscall_timergettime01
+[       OK ] test_nuttx_syscall_timergettime01
+[ RUN      ] test_nuttx_syscall_mkdir01
+[       OK ] test_nuttx_syscall_mkdir01
+[ RUN      ] test_nuttx_syscall_mkdir02
+[       OK ] test_nuttx_syscall_mkdir02
+[ RUN      ] test_nuttx_syscall_mkdir03
+[       OK ] test_nuttx_syscall_mkdir03
+[ RUN      ] test_nuttx_syscall_sched01
+[       OK ] test_nuttx_syscall_sched01
+[ RUN      ] test_nuttx_syscall_sched02
+[       OK ] test_nuttx_syscall_sched02
+[ RUN      ] test_nuttx_syscall_sched03
+[       OK ] test_nuttx_syscall_sched03
+[ RUN      ] test_nuttx_syscall_sched04
+[       OK ] test_nuttx_syscall_sched04
+[ RUN      ] test_nuttx_syscall_write01
+[       OK ] test_nuttx_syscall_write01
+[ RUN      ] test_nuttx_syscall_write02
+[       OK ] test_nuttx_syscall_write02
+[ RUN      ] test_nuttx_syscall_write03
+[       OK ] test_nuttx_syscall_write03
+[ RUN      ] test_nuttx_syscall_read01
+[       OK ] test_nuttx_syscall_read01
+[ RUN      ] test_nuttx_syscall_read02
+[       OK ] test_nuttx_syscall_read02
+[ RUN      ] test_nuttx_syscall_read03
+[       OK ] test_nuttx_syscall_read03
+[ RUN      ] test_nuttx_syscall_read04
+[       OK ] test_nuttx_syscall_read04
+[ RUN      ] test_nuttx_syscall_symlink01
+[       OK ] test_nuttx_syscall_symlink01
+[ RUN      ] test_nuttx_syscall_symlink02
+[       OK ] test_nuttx_syscall_symlink02
+[ RUN      ] test_nuttx_syscall_sockettest01
+NO.1 do socket() test, ret=-1  erron=22 exper7
+NO.2 do socket() test, ret=-1  erron=93 exper7
+NO.3 do socket() test, ret=-1  erron=93 exper7
+NO.4 do socket() test, ret=-1  erron=93 exper7
+NO.6 do socket() test, ret=-1  erron=93 exper7
+[       OK ] test_nuttx_syscall_sockettest01
+[ RUN      ] test_nuttx_syscall_sockettest02
+[       OK ] test_nuttx_syscall_sockettest02
+[==========] nuttx_syscall_test_suites: 83 te.
+[  PASSED  ] 83 test(s).

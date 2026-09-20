@@ -1,0 +1,54 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.4
+测试名称：RAM随机块设备读写
+当前状态：完成 / PASS
+结果摘要：1.024 MB RAM块设备的stress、single_write、cache_write三项全部通过
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- mkrd -m 10 -s 1000 1024
+- cmocka_driver_block -m /dev/ram10
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/drivers/drivertest/
+- nuttx/drivers/ramdisk.c
+
+四、原始证据来源
+- RAM随机块设备读写.txt完整记录
+
+五、注意事项
+- 记录中的一次“cmocka_driver_block -m”错误仅因缺少路径参数，不是测试失败。
+
+六、原始测试记录
+nsh> free
+      total       used       free    maxused e
+   15670840      20480   15650360     859464 m
+nsh> mkrd -m 10 -s 1000 1024
+nsh> ls -l /dev/ram10
+ brw-rw-rw-     1024000 /dev/ram10
+nsh> cmocka_driver_block -m
+Unknown option: m
+Usage: cmocka_driver_block -m <source>
+Where:
+  -m <source> Block device or mtd device moun.
+nsh> cmocka_driver_block -m /dev/ram10
+[==========] tests: Running 3 test(s).
+[ RUN      ] drivertest_block_stress
+[       OK ] drivertest_block_stress
+[ RUN      ] drivertest_block_single_write
+[       OK ] drivertest_block_single_write
+[ RUN      ] drivertest_block_cache_write
+[       OK ] drivertest_block_cache_write
+[==========] tests: 3 test(s) run.
+[  PASSED  ] 3 test(s).
+nsh> free
+      total       used       free    maxused e
+   15670840    1044920   14625920    1119992 m
+nsh>
