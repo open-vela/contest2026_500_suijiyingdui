@@ -21,7 +21,7 @@ docs/                             平台移植、源码集成、构建上板和 
 test-results/nsh-can/             本次 NSH/CAN 功能验收记录
 tests/xts/                        XTS 测试记录
 firmware/                         已验证的 CAN/ISO-TP/UDS/OBD-II 镜像及 SHA-256
-videos/s+演示视频说明与下载链接
+videos/                          实机演示视频《演示720.mp4》
 submission/                       《随机应队_2026 首届 openvela AI 硬件开发者大赛》项目说明书
 logs/                             官方 AI Coding 日志目录，保留给按组委会工具导出的真实记录
 ```
