@@ -1,0 +1,27 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_OK8MP_GPIO_TEST
+	tristate "OK8MP M7 GPIO/LED test"
+	default n
+	---help---
+		Enable the OK8MP M7 GPIO test command. The command toggles the
+		board user LEDs through the board GPIO LED interface.
+
+if EXAMPLES_OK8MP_GPIO_TEST
+
+config EXAMPLES_OK8MP_GPIO_TEST_PROGNAME
+	string "Program name"
+	default "gpio_test"
+
+config EXAMPLES_OK8MP_GPIO_TEST_PRIORITY
+	int "GPIO test command task priority"
+	default 100
+
+config EXAMPLES_OK8MP_GPIO_TEST_STACKSIZE
+	int "GPIO test command stack size"
+	default DEFAULT_TASK_STACKSIZE
+
+endif

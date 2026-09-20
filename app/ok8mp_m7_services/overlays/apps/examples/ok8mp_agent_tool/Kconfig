@@ -1,0 +1,25 @@
+config EXAMPLES_OK8MP_AGENT_TOOL
+	tristate "OK8MP Agent hardware Tool bridge"
+	default n
+	depends on OK8MP_M7_VOICE_I2C && UORB
+	---help---
+		Expose the OK8MP voice sensor, RGB LED and buzzer through a small
+		C Tool registry.  This is the hardware-facing adapter intended to be
+		connected to the official openvela Agent registration API when that
+		framework is available in the workspace.
+
+if EXAMPLES_OK8MP_AGENT_TOOL
+
+config EXAMPLES_OK8MP_AGENT_TOOL_PROGNAME
+	string "Program name"
+	default "agent_tool"
+
+config EXAMPLES_OK8MP_AGENT_TOOL_PRIORITY
+	int "Task priority"
+	default 100
+
+config EXAMPLES_OK8MP_AGENT_TOOL_STACKSIZE
+	int "Task stack size"
+	default 4096
+
+endif

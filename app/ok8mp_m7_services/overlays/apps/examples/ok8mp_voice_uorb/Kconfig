@@ -1,0 +1,32 @@
+config EXAMPLES_OK8MP_VOICE_UORB
+	tristate "OK8MP voice sensor uORB bridge"
+	default n
+	depends on UORB && OK8MP_M7_VOICE_I2C
+	---help---
+		Publish voice recognition results to the sensor_voice_command uORB
+		topic and optionally map the built-in color command IDs to RGB.
+
+if EXAMPLES_OK8MP_VOICE_UORB
+
+config EXAMPLES_OK8MP_VOICE_UORB_PROGNAME
+	string "Program name"
+	default "voice_uorb"
+
+config EXAMPLES_OK8MP_VOICE_UORB_PRIORITY
+	int "Bridge task priority"
+	default 100
+
+config EXAMPLES_OK8MP_VOICE_UORB_STACKSIZE
+	int "Bridge task stack size"
+	default 4096
+
+config EXAMPLES_OK8MP_VOICE_UORB_POLL_MS
+	int "Voice sensor poll interval (ms)"
+	default 100
+	range 20 5000
+
+config EXAMPLES_OK8MP_VOICE_UORB_RGB_FEEDBACK
+	bool "Map command IDs 1..4 to red/green/blue/off"
+	default y
+
+endif

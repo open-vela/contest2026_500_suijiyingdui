@@ -1,0 +1,41 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.13
+测试名称：Timer定时器功能测试
+当前状态：基础功能完成；官方驱动CMocka待补
+结果摘要：自定义timer_test的10次定时事件全部触发；未执行官方oneshot/timer设备节点CMocka测试
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- timer_test 10 1000
+
+三、随源码提交或随测试归档的其他文件
+- apps/examples/ok8mp_timer_test/
+- nuttx/boards/arm/mx8mp/ok8mp-m7/定时器配置
+
+四、原始证据来源
+- xts测试.txt第1823～1836行
+
+五、注意事项
+- 官方要求根据arch alarm或arch timer执行cmocka_driver_oneshot/对应timer设备测试；当前timer_test不能完全替代该项。
+
+六、原始测试记录
+nsh> timer_test 10 1000
+timer_test: count=10 interval=1000 ms
+timer_test: tick 1 time=486.570000000
+timer_test: tick 2 time=487.580000000
+timer_test: tick 3 time=488.590000000
+timer_test: tick 4 time=489.600000000
+timer_test: tick 5 time=490.610000000
+timer_test: tick 6 time=491.620000000
+timer_test: tick 7 time=492.630000000
+timer_test: tick 8 time=493.640000000
+timer_test: tick 9 time=494.650000000
+timer_test: tick 10 time=495.660000000
+timer_test: done

@@ -1,0 +1,35 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.2
+测试名称：RAM文件系统读写
+当前状态：完成 / PASS
+结果摘要：fstest共20项通过、0项失败
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- fstest -n 10 -m /tmp
+
+三、随源码提交或随测试归档的其他文件
+- apps/testing/fs/fstest/
+
+四、原始证据来源
+- xts测试.txt第1781～1792行
+
+六、原始测试记录
+nsh> fstest -n 10 -m /tmp
+Final memory usage:
+VARIABLE  BEFORE   AFTER    DELTA
+======== ======== ======== ========
+arena       f25e0    f25e0        0
+ordblks        10       11        1
+mxordblk    cfb28    b3d60 fffe4238
+uordblks     c6b0     cdc0      710
+fordblks    e5f30    e5820 fffff8f0
+File system tests done... OK: 20, FAILED: 0
+演示视频：https://pan.baidu.com/s/1An33r518zOHb4_BQlM8bHQ?pwd=1yia （提取码：1yia）

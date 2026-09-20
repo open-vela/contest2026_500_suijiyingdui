@@ -1,0 +1,33 @@
+M7端：
+nsh> mount -t tmpfs /tmp
+nsh> dd if=/dev/urandom of=/tmp/ok8mp_m7_to_mac.bin bs=64 count=4
+256 bytes (4 blocks) copied
+nsh> ls -l /tmp/ok8mp_m7_to_mac.bin
+ -rwxrwxrwx         256 /tmp/ok8mp_m7_to_mac.bin
+nsh> md5_test -f /tmp/ok8mp_m7_to_mac.bin -c 1
+001: 74a93327fe0b1e8cafe2048736383b7d
+md5_test: PASS (1 identical digest)
+
+Mac→M7：
+host$ md5 -q /tmp/ok8mp_uart_bidirectional.bin
+cb173d86c5bd1cb9e7de1b221bf5a955
+host$ shasum -a 256 /tmp/ok8mp_uart_bidirectional.bin
+75d378f503b4b4668934eee4fefec629e814fdbc9ec7da0f50a63ceb245bcfc2  /tmp/ok8mp_uart_bidirectional.bin
+host$ python tests/xts/tools/ok8mp_ymodem_send.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -s /tmp /tmp/ok8mp_uart_bidirectional.bin
+NSH synchronized
+sending ok8mp_uart_bidirectional.bin (4096 bytes)
+name:ok8mp_uart_bidirectional.bin filesize:4096
+100.0% 4096:4096 left:00h00m00s
+time used:0.4s speed 9.6kB/s
+ all time:0.43s average speed:9.28kB/s
+OK8MP YMODEM send: PASS
+
+M7→Mac：
+host$ python tests/xts/tools/ok8mp_ymodem_receive.py -t /dev/cu.usbmodem58BE0307013 -b 115200 -r /tmp/ok8mp_m7_to_mac.bin -o /tmp/ok8mp_uart_rx
+NSH synchronized
+M7 sb handshake received
+OK8MP YMODEM receive: PASS (/tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin)
+host$ md5 -q /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin
+74a93327fe0b1e8cafe2048736383b7d
+host$ shasum -a 256 /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin
+8fb486d39b672fbe3df83920baf4f8aaf4eda4d0eb629d30f454e4415b4645a6  /tmp/ok8mp_uart_rx/ok8mp_m7_to_mac.bin

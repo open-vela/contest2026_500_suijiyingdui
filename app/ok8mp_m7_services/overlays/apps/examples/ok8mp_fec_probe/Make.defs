@@ -1,0 +1,9 @@
+############################################################################
+# apps/examples/ok8mp_fec_probe/Make.defs
+#
+# SPDX-License-Identifier: Apache-2.0
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_FEC_PROBE),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_fec_probe
+endif

@@ -1,0 +1,48 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.6
+测试名称：GPIO功能测试
+当前状态：等效硬件验证完成；官方CMocka回环待补或确认替代
+结果摘要：4路用户LED依次亮灭两轮，串口输出与实物变化一致；未执行官方双GPIO回环CMocka命令
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- gpio_test 8 250
+
+三、随源码提交或随测试归档的其他文件
+- apps/examples/ok8mp_gpio_test/
+- nuttx/boards/arm/mx8mp/ok8mp-m7/
+
+四、原始证据来源
+- xts测试.txt第1802～1821行；配套实物视频
+
+五、注意事项
+- 官方步骤为cmocka_driver_gpio连接两个GPIO设备节点。当前自定义LED测试可证明输出功能，但若严格按官方命令验收，需要补GPIO输入回环或取得替代认可。
+
+六、原始测试记录
+nsh> gpio_test 8 250
+gpio_test: initialized 4 user LED GPIO(s)
+gpio_test: LED0 ON
+gpio_test: LED0 OFF
+gpio_test: LED1 ON
+gpio_test: LED1 OFF
+gpio_test: LED2 ON
+gpio_test: LED2 OFF
+gpio_test: LED3 ON
+gpio_test: LED3 OFF
+gpio_test: LED0 ON
+gpio_test: LED0 OFF
+gpio_test: LED1 ON
+gpio_test: LED1 OFF
+gpio_test: LED2 ON
+gpio_test: LED2 OFF
+gpio_test: LED3 ON
+gpio_test: LED3 OFF
+gpio_test: done
+演示视频：https://pan.baidu.com/s/1An33r518zOHb4_BQlM8bHQ?pwd=1yia （提取码：1yia）

@@ -1,0 +1,10 @@
+############################################################################
+# apps/examples/ok8mp_gpio_test/Make.defs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_GPIO_TEST),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_gpio_test
+endif

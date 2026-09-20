@@ -1,0 +1,32 @@
+#
+# apps/examples/ok8mp_can_ecu/Kconfig
+#
+
+config EXAMPLES_OK8MP_CAN_ECU
+	tristate "OK8MP simulated ECU state and DTC client"
+	default n
+	depends on EXAMPLES_OK8MP_CAN_SERVICE
+	---help---
+		Query and control the ESP32 simulated ECU over ISO-TP, inspect the
+		P0217/P0562 DTC model and run a multi-frame transport self-test.
+
+if EXAMPLES_OK8MP_CAN_ECU
+
+config EXAMPLES_OK8MP_CAN_ECU_PROGNAME
+	string "Program name"
+	default "can_ecu"
+
+config EXAMPLES_OK8MP_CAN_ECU_REQUEST_ID
+	hex "ISO-TP physical request CAN ID"
+	default 0x7e0
+
+config EXAMPLES_OK8MP_CAN_ECU_RESPONSE_ID
+	hex "ISO-TP physical response CAN ID"
+	default 0x7e8
+
+config EXAMPLES_OK8MP_CAN_ECU_TIMEOUT_MS
+	int "ISO-TP transaction timeout (ms)"
+	default 2000
+	range 100 10000
+
+endif

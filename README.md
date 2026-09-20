@@ -1,148 +1,40 @@
-# contest2026_500_suijiyingdui
+# 面向车辆与工程机械的 OK8MP-M7 openvela 智能终端与边云协同诊断系统
 
-👋 欢迎参加 **2026 首届 openvela AI 硬件开发者大赛**！
+## 作品简介
 
-这是组委会为你的队伍创建的**专属参赛仓库**（本仓为样例/模板，队伍编号 `500`；你看到的将是你自己的 `contest2026_<编号>_<队伍名>`）。比赛期间，你的全部参赛代码、打包产物与 AI Coding 日志都提交到这里。
+作品运行在飞凌 OK8MP 的 i.MX8M Plus Cortex-M7 实时核上，按路径 A 完成 openvela 的新硬件适配。M7 可由 U-Boot 独立加载并进入 NSH，完成串口交互、I2C 离线语音模块访问、RGB 灯和蜂鸣器控制、uORB 语音事件传递、以太网安全通信，以及基于 FlexCAN1 的状态监测和 ECU 诊断。
 
-> 本仓既是「代码仓」，又内置了一键拉取整套 openvela 工程的 `repo` 清单（manifest）。你只需跟它打交道，**自始至终只动一个文件夹**。
+项目使用 ESP32-S3 作为模拟 ECU。OK8MP 通过 P29 的 CAN1_H/CAN1_L 与 ESP32-S3 建立 500 kbit/s Classic CAN 通信。实板已完成 `/dev/can0` 设备访问、周期状态帧监测、主动链路诊断、ISO-TP 多帧传输、UDS 状态与 DTC 查询，以及 OBD-II PID、故障码和 VIN 查询。已验证镜像、校验和、接线和测试记录均包含在本仓。
 
----
+网络可用时，M7 通过 TCP/IP、DNS、TLS 1.2、X.509 校验和 HTTPS 访问云端模型。openvela AI Agent 已用于语音模块和网络状态的 Tool 调用。CAN 的底层通信和诊断功能以 NSH 实板测试为验收依据；本提交不将仍在单独回归的 Agent CAN 诊断机制写入完成项。
 
-## 一、先读这些官方文档
+## 选题方向
 
-**通用（所有赛道必读）：**
+新硬件适配。本作品围绕 OK8MP Cortex-M7 建立启动、DDR 链接、时钟、IOMUX、串口、GPIO、定时器、I2C、ENET1/FEC 与 FlexCAN1 的板级能力，并在此基础上运行 openvela 的网络、事件和智能应用组件。
 
-| 文档                                                                                                                                     | 用途                                           |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| [《大赛总览》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/contest_overview.md)                        | 赛道、流程、评分、资源，建议先通读             |
-| [《参赛代码提交指南》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/code_submission_guide.md)           | 仓库获取、提交流程、时间与权限（**以此为准**） |
-| [《AI Coding 日志归集与提交手册》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_coding_log_guide.md) | 如何导出 AI 对话日志并提交到 `logs/`           |
-
-**按你的赛道选读（三选一）：**
-
-| 赛道                  | 教程导航                                                                                                                                                 |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 快应用 / 手表应用创新 | [快应用教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/quickapp/quickapp_guide_index.md)                         |
-| AI 硬件产品创新       | [AI 硬件赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_hardware/ai_hardware_guide_index.md)              |
-| 新硬件适配            | [新硬件适配赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/hardware_porting/hardware_porting_guide_index.md) |
-
----
-
-## 二、第一步：拉取完整工程
-
-用组委会提供的命令一键拉取「openvela 全量源码 + 你的专属仓」：
-
-```bash
-repo init -u https://github.com/open-vela/contest2026_500_suijiyingdui \
-  -b dev-ai-contest-2026 -m contest2026_500_suijiyingdui.xml
-repo sync -c -j8
-```
-
-同步后，你的整个仓库位于工作区的 `contest2026_500_suijiyingdui/`，openvela 全量源码在外层（`nuttx/`、`apps/`、`packages/`、`vendor/` 等）。
-
----
-
-## 三、第二步：在哪里写代码
-
-**只在自己的仓目录 `contest2026_500_suijiyingdui/` 里开发。** 不同作品形态放在对应子目录，manifest 会通过 `<linkfile>` 把它们**软链**到 openvela 编译树该在的位置——你不用手动 copy：
-
-| 作品形态 | 你的代码放这里             | 系统自动映射到                                 |
-| -------- | -------------------------- | ---------------------------------------------- |
-| 应用     | `app/hello_app/`           | `packages/demos/contest2026_500_hello_app`     |
-| 快应用   | `quickapp/hello_quickapp/` | `packages/apps/contest2026_500_hello_quickapp` |
-| 板级适配 | `board/contest_board/`     | `vendor/openvela/boards/contest2026_500_board` |
-
-> 用不到的形态目录可以删掉；新增作品时按同样规则加子目录，并在 `contest2026_500_suijiyingdui.xml` 里补一条 `<linkfile>` 映射即可。**生产仓库（packages/nuttx/vendor 等）零改动。**
-
-建议仓库目录约定（便于评委定位）：
+## 目录结构
 
 ```text
-app/ | quickapp/ | board/   # 你的作品代码
-logs/                       # AI Coding 日志（主动导出后提交，格式见 logs/README.md）
-README.md                   # 作品说明（提交前请改成你自己的，见第六节）
+board/ok8mp_m7_openvela/          OK8MP-M7 板级代码、配置、链接脚本和芯片端口快照
+app/ok8mp_m7_services/            项目应用覆盖代码、Agent 覆盖代码和 ESP32-S3 模拟 ECU 工程
+docs/                             平台移植、源码集成、构建上板和 CAN 实板验证文档
+test-results/nsh-can/             本次 NSH/CAN 功能验收记录
+tests/xts/                        XTS 测试记录
+firmware/                         已验证的 CAN/ISO-TP/UDS/OBD-II 镜像及 SHA-256
+videos/s+演示视频说明与下载链接
+submission/                       《随机应队_2026 首届 openvela AI 硬件开发者大赛》项目说明书
+logs/                             官方 AI Coding 日志目录，保留给按组委会工具导出的真实记录
 ```
 
-> 仓内附带了一个 `.gitignore.example`，给出了**编译产物**等不需要进仓的文件示例。如需启用，`cp .gitignore.example .gitignore` 后按需增删即可。**注意 `logs/` 下最终导出的 AI Coding 日志必须提交，不要忽略。**
->
-> `logs/` 的目录结构与提交格式见 [logs/README.md](logs/README.md)。
+## 运行方式
 
----
+1. 按大赛说明在 openvela 工作区根目录完成 `repo init` 和 `repo sync`。本仓的 manifest 将 `board/ok8mp_m7_openvela` 映射到 `vendor/openvela/boards/contest2026_500_ok8mp_m7_openvela`，将 `app/ok8mp_m7_services` 映射到 `packages/demos/contest2026_500_ok8mp_m7_services`。
+2. 阅读 [docs/源码集成说明.md](docs/源码集成说明.md)，将 `port_snapshot` 和 `overlays` 中的快照按原始相对路径集成到完整 openvela 工作树。该步骤保留了队伍仓和公共仓的边界。
+3. 已验证发布镜像为 `firmware/nuttx-ok8mp-m7-can-uds-obd-tested.bin`，SHA-256 为 `1c3a6baaf3b4fb7ddf00fe9b5c345f6971704a77380eb6a8dd464f77a1a592a5`。传输、U-Boot 启动和 NSH 验收命令见 [docs/操作手册.md](docs/操作手册.md)。
+4. CAN 台架的 ESP32-S3 固件位于 `app/ok8mp_m7_services/esp32_can_ecu/`。完整接线、PlatformIO 烧录和诊断协议见 [docs/OK8MP_M7_CAN通信与实板验证.md](docs/OK8MP_M7_CAN通信与实板验证.md)。
 
-## 四、第三步：编译与运行
+## AI Coding 使用说明
 
-编译/运行步骤随作品形态不同而不同，请参考你所在赛道的教程导航：
+开发过程中，AI 用于检索 i.MX8MP 资料、分析启动和外设配置、梳理 CAN 报文与诊断流程、辅助阅读实板日志和形成测试文档。涉及镜像加载、CAN 收发、协议响应和网络通信的结论均以 U-Boot、NSH、ESP32 串口或 Linux `candump` 的实际输出复核。
 
-- 快应用 / 手表应用：[快应用教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/quickapp/quickapp_guide_index.md)（含模拟器与开发板部署）。
-- AI 硬件产品创新：[AI 硬件赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_hardware/ai_hardware_guide_index.md)（环境搭建、编译烧录、Skill 开发）。
-- 新硬件适配：[新硬件适配赛道教程导航](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/hardware_porting/hardware_porting_guide_index.md)（BSP 移植、最小 NSH 基线）。
-
-子目录已通过 manifest 中的 `<linkfile>` 软链进 openvela 编译树，因此构建在 openvela 工作区**根目录**（即你这个仓的上一级）进行。openvela 使用 `build.sh` 作为统一入口，接收一个 **board config 路径**作为参数：
-
-```bash
-# 进入 openvela 工作区根目录（你的仓的上一级）
-cd ..
-
-# 通用语法：第一个参数是 board config 路径，第二个参数可以是 menuconfig / distclean 等
-./build.sh <board-config-path> [menuconfig|distclean] [-j8]
-```
-
-> 具体的 board config 路径、目标产物、模拟器/真机部署方式请以你所在赛道的教程导航为准。本仓 `app/` `quickapp/` `board/` 三个示例骨架对应的 Kconfig 选项可通过 `menuconfig` 启用。
-
----
-
-## 五、第四步：提交作品
-
-1. **fork** 你的专属仓 → 开发 → `git commit` 并推送 → 向专属仓发起 **Pull Request**，可**自行 review 并合入**（无需等组委会）。
-2. **AI Coding 日志**：与 AI 工具的对话会自动记录到本机 staging（不会自动上传），需你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交。详见[《AI Coding 日志归集与提交手册》](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/contest_2026/ai_coding_log_guide.md)。
-3. 若需改动 **nuttx 等公共仓库**，不在本仓改，而是 fork 对应公共仓、以 PR 提交到 `dev-ai-contest-2026` 分支，由组委会 review 后合入。
-
-> ⏰ **提交作品截止：9 月 20 日**。截止后统一收回 push 权限，仍可查看 / clone。
->
-> 获奖后再按要求将作品 PR 至 openvela 上游对应仓库（走标准 PR + CI 流程）。
-
-### 关于 PR 与 CLA
-
-- 本仓所有改动通过 **Pull Request** 合入（分支保护强制，可自行合入自己的 PR）。
-- 首次贡献需在[**官网签署 CLA**](https://openvela.com/#/community/cla)；PR 上会自动跑 `cla/signature` 检查，在官网签署成功后，在 PR 评论 `/check-cla` 复检即可通过。
-
----
-
-## 六、提交前：把本 README 改成你的作品说明
-
-本文件目前是组委会给的**使用说明书**。**作品提交前，请把它替换成你自己作品的说明**，方便评委快速了解你做了什么、怎么跑起来。建议至少包含以下内容：
-
-```markdown
-# <你的作品名>
-
-## 一、作品简介
-<一句话/一段话说明这个作品是什么、解决什么问题、亮点在哪>
-
-## 二、选题方向
-<快应用 / 手表应用创新 ｜ AI 硬件产品创新 ｜ 新硬件适配 ｜ 自定方向，并简述理由>
-
-## 三、目录结构
-<列出你这个仓里各目录/文件的作用，例如：>
-- `app/xxx/`        — <说明>
-- `board/xxx/`      — <说明>
-- `quickapp/xxx/`   — <说明>
-- `logs/`           — AI Coding 日志
-- `docs/` 或其他    — <说明>
-
-## 四、运行方式
-<拉取工程后，如何编译、烧录/部署、运行的完整步骤；最好能让评委照着一步步复现>
-
-## 五、AI Coding 使用说明
-<说明本作品如何借助 AI 辅助开发：
-- 在需求拆解 / 方案设计 / 编码 / 调试 / 文档等环节如何与 AI 协作；
-- AI 对开发效率或质量带来的实际帮助。
-完整对话日志见 logs/ 目录>
-```
-
-> 提示：将会根据「作品本身 + 你的 README 说明 + `logs/` 里的 AI Coding 日志」来理解和评估你的作品，README 写清楚很重要。
-
----
-
-## 附：仓库命名规范
-
-`contest2026_<编号>_<队伍名>` — 编号三位零填充；队名 slug（全小写、英文/拼音、连字符）。例：`contest2026_500_suijiyingdui`。
-（仓库由组委会统一创建，**每队仅一个仓**，无需自行命名。）
+`logs/` 只用于存放按组委会归集工具导出的真实会话日志。本次提交不使用示例日志或手工生成的日志文件。

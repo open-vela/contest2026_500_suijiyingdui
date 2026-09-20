@@ -1,0 +1,57 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.2.2
+测试名称：Cold boot启动异常测试
+当前状态：完成 / PASS（M7启动正常；U-Boot gpio_led绑定告警需单独说明）
+结果摘要：通过开发板电源开关完成断电、重新上电，系统重新加载M7镜像并正常进入NSH；恢复后echo和free执行正常
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- 完全断电3～5秒
+- 重新上电并保存完整启动日志
+
+三、随源码提交或随测试归档的其他文件
+- nuttx/boards/arm/mx8mp/ok8mp-m7/（BSP、Kconfig、defconfig、链接脚本及板级初始化）
+- 对应测试镜像nuttx.bin（发布/复现附件，不替代源码）
+
+四、原始证据来源
+- 原汇总表
+- 2026-07-27实机电源开关Cold boot启动日志
+
+五、注意事项
+- 开发板未找到独立RESET按键，本次采用关闭电源、等待后重新上电的方法，覆盖范围不弱于复位按键测试。
+- U-Boot阶段出现“Error binding driver 'gpio_led': -22 / Some drivers failed to bind”，但后续MMC加载nuttx.bin、bootaux启动M7及NSH恢复均正常。该提示属于现有A53 U-Boot设备模型绑定告警，应在提交说明中单列，不应表述为M7 HardFault、PANIC或启动失败。
+
+六、原始测试记录
+2026-07-27 电源开关Cold boot关键启动记录：
+
+U-Boot SPL 2020.04-00016-gc934c03999
+Reset cause: POR
+Model: Forlinx OK8MPlus LPDDR4 EVK board
+DRAM:  2 GiB
+Loading Environment from MMC... OK
+switch to partitions #0, OK
+mmc2(part 0) is current device
+410928 bytes read in 45 ms (8.7 MiB/s)
+## Starting auxiliary core stack = 0x8010E1C8.
+
+M7恢复验证：
+
+nsh> echo COLD_BOOT_RECOVERY_OK
+COLD_BOOT_RECOVERY_OK
+nsh> free
+      total       used       free    maxused
+   15670840      19368   15651472      19792
+
+判定：
+- 电源重新上电后U-Boot成功从MMC加载410928字节M7镜像；
+- bootaux正常启动Cortex-M7；
+- openvela重新进入NuttShell；
+- echo和free运行正常，未出现M7 HardFault、PANIC、assert、crash或卡死；
+- 1.2.2 Cold boot启动异常测试判定为PASS。

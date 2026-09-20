@@ -1,0 +1,38 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：2.1.4
+测试名称：Reboot启动时间测试
+当前状态：U-Boot reset 10次平均达标；官方NSH reboot待完成
+结果摘要：U-Boot reset重复10次平均3.4秒，低于6秒门槛；但当前NSH reboot仍返回boardctl failed: 2
+
+一、使用镜像
+- 镜像名称：xts-remaining
+  文件路径：firmware/xts/xts-remaining/nuttx.bin
+  文件大小：410928 bytes
+  SHA-256：26976a902227fc054982c991395fe024d6a1d696ea8cb83f5e24ecd12306476c
+  用途说明：mm、MD5、RAM块设备、UART、YMODEM、Reboot及稳定性补充测试镜像
+
+二、复现命令
+- 正式测试：在NSH执行reboot，重复10次并使用串口时间戳
+
+三、随源码提交或随测试归档的其他文件
+- nuttx/boards/arm/mx8mp/ok8mp-m7/（BSP、Kconfig、defconfig、链接脚本及板级初始化）
+- 对应测试镜像nuttx.bin（发布/复现附件，不替代源码）
+
+四、原始证据来源
+- 2026-07-27 U-Boot reset 10次测试平均值记录；待补NSH reboot测试
+
+五、注意事项
+- U-Boot的forlinx=> reset不等同于官方要求的nsh> reboot，因此3.4秒证明热重启时间数值达标，但不能替代NSH复位接口测试。
+- 当前xts-remaining的nsh> reboot不能完成复位，需先适配i.MX8MP M7板级复位。
+- 提交附件仍建议保留10次逐次时长、最大值、最小值和带时间戳串口日志。
+
+六、原始测试记录
+2026-07-27 U-Boot热重启时间测试：
+启动方式：U-Boot执行forlinx=> reset
+计时终点：出现NuttShell(NSH)提示符
+测试次数：10次
+平均时间：3.4 s
+门槛：<= 6 s
+数值结论：PASS
+

@@ -1,0 +1,202 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.1.11
+测试名称：pipe
+当前状态：完成 / PASS
+结果摘要：FIFO、互锁、pipe及重定向测试全部通过
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+
+二、复现命令
+- pipe
+
+三、随源码提交或随测试归档的其他文件
+- apps/examples/pipe/
+
+四、原始证据来源
+- xts测试.txt第1578～1755行
+
+六、原始测试记录
+nsh> pipe
+
+pipe_main: Performing FIFO test
+open_write_only: Opening FIFO for write access
+open_write_only: Waiting for open_write_only d
+pipe_main: open_write_only returned 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Starting transfer_reader thread
+transfer_test: Starting transfer_writer thread
+transfer_reader: started
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: started
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Boost priority of transfer_rea1
+transfer_test: Starting transfer_reader thread
+transfer_reader: started
+transfer_test: Starting transfer_writer thread
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: started
+transfer_reader: 18200 bytes read
+transfer_writer: 18200 bytes written
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Starting transfer_reader thread
+transfer_test: Boost priority of transfer_wri1
+transfer_reader: started
+transfer_test: Starting transfer_writer thread
+transfer_writer: started
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Boost priority of transfer_rea1
+transfer_test: Starting transfer_reader thread
+transfer_reader: started
+transfer_test: Boost priority of transfer_wri1
+transfer_test: Starting transfer_writer thread
+transfer_writer: started
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: Waiting for transfer_writer thd
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+
+pipe_main: Performing pipe interlock test
+interlock_test: Starting null_writer thread
+interlock_test: Opening FIFO for read access
+null_writer: started -- sleeping
+null_writer: Opening FIFO for write access
+null_writer: Opened /var/testfifo-2 for writig
+interlock_test: Reading from /var/testfifo-2
+null_writer: Closing /var/testfifo-2
+interlock_test: read returned
+interlock_test: Closing /var/testfifo-2
+interlock_test: Waiting for null_writer thread
+null_writer: Returning success
+interlock_test: writer returned 0
+interlock_test: Starting null_reader thread
+interlock_test: Opening FIFO for write access
+null_reader: started -- sleeping
+null_reader: Opening FIFO for read access
+null_reader: Opened /var/testfifo-2 for readig
+interlock_test: Writing to /var/testfifo-2
+interlock_test: Wrote 16 bytes of data
+interlock_test: write returned
+interlock_test: Closing /var/testfifo-2
+interlock_test: Waiting for null_reader thread
+null_reader: Closing /var/testfifo-2
+null_reader: Returning success
+interlock_test: reader returned 0
+interlock_test: Returning 0
+pipe_main: FIFO interlock test PASSED
+pipe_main: FIFO test PASSED
+
+pipe_main: Performing pipe test
+transfer_test: fdin=4 fdout=3
+transfer_test: Starting transfer_reader thread
+transfer_test: Starting transfer_writer thread
+transfer_reader: started
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: started
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Boost priority of transfer_rea1
+transfer_test: Starting transfer_reader thread
+transfer_reader: started
+transfer_test: Starting transfer_writer thread
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: started
+transfer_reader: 18200 bytes read
+transfer_writer: 18200 bytes written
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Starting transfer_reader thread
+transfer_test: Boost priority of transfer_wri1
+transfer_reader: started
+transfer_test: Starting transfer_writer thread
+transfer_writer: started
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+transfer_test: fdin=4 fdout=3
+transfer_test: Boost priority of transfer_rea1
+transfer_test: Starting transfer_reader thread
+transfer_reader: started
+transfer_test: Boost priority of transfer_wri1
+transfer_test: Starting transfer_writer thread
+transfer_writer: started
+transfer_test: Waiting for transfer_writer thd
+transfer_writer: 18200 bytes written
+transfer_reader: 18200 bytes read
+transfer_test: transfer_writer returned 0
+transfer_test: Waiting for transfer_reader thd
+transfer_test: transfer_reader returned 0
+transfer_test: returning 0
+
+pipe_main: Performing redirection test
+redirection_test: Starting redirect_writer ta3
+redirection_test: Starting redirect_reader ta4
+redirect_writer: started with fdout=3
+redirection_test: Waiting for null_reader thrd
+redirect_reader: started with fdin=4
+
+Four score and seven years ago our fathers br,
+conceived in Liberty, and dedicated to the pr.
+
+Now we are engaged in a great civil war, testo
+conceived and so dedicated, can long endure. .
+We have come to dedicate a portion of that fin
+ere
+gave their lives that that nationredirect_wris
+ might live. It isaltogether fitting and prope
+should do this.
+
+But, in a larger sense, we can not dedicate -.
+The brave men, living and dead, who struggledr
+to add or detract. The world will little noten
+never forget what they did here. It is for use
+unfinished work which they who fought here hao
+be here dedicated to the great task remaininge
+increased devotion to that cause for which the
+here highly resolve that these dead shall not,
+shall have a new birth of freedom - and that e
+people, shall not perish from the earth.
+
+redirect_reader: 1456 bytes read
+redirect_reader: Returning success
+redirection_test: Waiting...
+redirection_test: returning 0
+pipe_main: PIPE redirection test PASSED
+pipe_main: PIPE test PASSED

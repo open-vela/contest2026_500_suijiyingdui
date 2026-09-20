@@ -1,0 +1,32 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_OK8MP_NET_PROXY
+	tristate "OK8MP M7 A53 network proxy client"
+	default n
+	---help---
+		Enable the OK8MP M7 network proxy client command. The command
+		emits JSON-line requests for an A53 Linux-side proxy daemon and
+		waits for JSON-line responses.
+
+if EXAMPLES_OK8MP_NET_PROXY
+
+config EXAMPLES_OK8MP_NET_PROXY_PROGNAME
+	string "Program name"
+	default "net_proxy"
+
+config EXAMPLES_OK8MP_NET_PROXY_PRIORITY
+	int "Network proxy command task priority"
+	default 100
+
+config EXAMPLES_OK8MP_NET_PROXY_STACKSIZE
+	int "Network proxy command stack size"
+	default DEFAULT_TASK_STACKSIZE
+
+config EXAMPLES_OK8MP_NET_PROXY_TIMEOUT_MS
+	int "Default response timeout in milliseconds"
+	default 10000
+
+endif

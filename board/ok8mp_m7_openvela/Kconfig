@@ -1,0 +1,110 @@
+# SPDX-License-Identifier: Apache-2.0
+
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config MX8MP_RUN_FROM_ITCM
+	bool "Run from Instruction Tightly Coupled Memory (ITCM)"
+	default n
+	---help---
+		Run software from ITCM instead of DDR memory
+
+config OK8MP_M7_VOICE_I2C
+	bool "OK8MP M7 I2C voice sensor"
+	default n
+	depends on I2C
+	---help---
+		Enable a simple OK8MP-M7 board-level I2C voice sensor driver.
+		The driver registers /dev/voicesensor0 and reads one sensor
+		status register through the configured I2C bus.
+
+if OK8MP_M7_VOICE_I2C
+
+config OK8MP_M7_VOICE_I2C_BUS
+	int "Voice sensor I2C bus"
+	default 3
+	range 1 6
+
+config OK8MP_M7_VOICE_I2C_ADDR
+	hex "Voice sensor I2C address"
+	default 0x0f
+
+config OK8MP_M7_VOICE_I2C_REG
+	hex "Voice sensor status register"
+	default 0x08
+
+config OK8MP_M7_VOICE_I2C_FREQ
+	int "Voice sensor I2C frequency"
+	default 100000
+
+endif
+
+config OK8MP_M7_FEC_PROBE
+	bool "OK8MP M7 FEC MDIO PHY probe"
+	default n
+	help
+		Enable the board-level FEC MDIO probe for the Ethernet port wired to
+		ENET1/FEC at 0x30be0000.  The probe resets the YT8521 PHY and reads
+		its Clause 22 registers.  It also provides the low-level diagnostic
+		command used while bringing up the direct M7 Ethernet path.
+
+config OK8MP_M7_FEC_NET
+	bool "OK8MP M7 ENET1/FEC NuttX network driver"
+	default n
+	depends on NET && NET_ETHERNET && NET_IPv4 && NET_ARP
+	---help---
+		Register the OK8MP ENET1/FEC controller as a NuttX Ethernet device.
+		The driver reuses the verified YT8521/RGMII setup and OCRAM DMA rings,
+		then presents them through struct net_driver_s as eth0.  The first
+		implementation uses polling intentionally; it is a stable foundation
+		for IPv4, ARP, ICMP, DHCP and TCP before FEC IRQ handling is enabled.
+
+config OK8MP_M7_FLEXCAN1
+	bool "OK8MP M7 native CAN1 character device"
+	default n
+	select MX8MP_FLEXCAN
+	select MX8MP_FLEXCAN1
+	---help---
+		Configure the board's native, isolated CAN1 interface and register
+		the NuttX character device /dev/can0.  The initial implementation is
+		classic CAN (CAN 2.0), intended to interoperate with a 500 kbit/s
+		ESP32 TWAI test ECU.  It does not enable CAN FD.
+
+if OK8MP_M7_FLEXCAN1
+
+config OK8MP_M7_FLEXCAN1_BITRATE
+	int "CAN1 nominal bitrate"
+	default 500000
+	range 125000 1000000
+	---help---
+		Nominal classic CAN bitrate in bit/s.  The default uses the 24 MHz
+		CAN root clock with a 12 time-quanta, 500 kbit/s setup.
+
+endif # OK8MP_M7_FLEXCAN1
+
+config OK8MP_M7_HEARTBEAT
+	bool "OK8MP M7 heartbeat task"
+	default n
+	---help---
+		Start a tiny background task that prints a heartbeat periodically.
+		This is useful for validating whether the M7 keeps running after
+		the A53 Linux kernel boots.
+
+if OK8MP_M7_HEARTBEAT
+
+config OK8MP_M7_HEARTBEAT_INTERVAL
+	int "Heartbeat interval in seconds"
+	default 2
+	range 1 60
+
+config OK8MP_M7_HEARTBEAT_PRIORITY
+	int "Heartbeat task priority"
+	default 80
+
+config OK8MP_M7_HEARTBEAT_STACKSIZE
+	int "Heartbeat task stack size"
+	default 1024
+
+endif

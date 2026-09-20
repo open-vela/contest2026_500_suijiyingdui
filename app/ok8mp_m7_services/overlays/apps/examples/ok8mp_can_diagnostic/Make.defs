@@ -1,0 +1,7 @@
+############################################################################
+# apps/examples/ok8mp_can_diagnostic/Make.defs
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_OK8MP_CAN_DIAGNOSTIC),)
+CONFIGURED_APPS += $(APPDIR)/examples/ok8mp_can_diagnostic
+endif

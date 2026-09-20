@@ -1,0 +1,87 @@
+openvela OK8MP Cortex-M7 XTS测试记录
+================================================================
+官方编号：1.3.7
+测试名称：I2C功能测试及语音外设
+当前状态：完成 / PASS
+结果摘要：I2C3读取0x0f设备成功，语音驱动CMocka 2项通过
+
+一、使用镜像
+- 镜像名称：xts-basic
+  文件路径：firmware/xts/xts-basic/nuttx.bin
+  文件大小：320492 bytes
+  SHA-256：a281ebe53bf6e1abe5b702d8429866ff7bf5e7b8f5739b6fc86fd63e7676bbf0
+  用途说明：基础NSH、libc、文件系统、GPIO、Timer及I2C测试镜像
+- 镜像名称：xts-cmocka
+  文件路径：firmware/xts/xts-cmocka/nuttx.bin
+  文件大小：393504 bytes
+  SHA-256：待补算（现有文本记录未保存该镜像摘要）
+  用途说明：CMocka内存、调度、系统调用及语音驱动测试镜像
+
+二、复现命令
+- i2c bus
+- i2c get -b 3 -a 0x0f -r 0x0b
+- cmocka --suite ok8mp_voice
+
+三、随源码提交或随测试归档的其他文件
+- OK8MP离线语音模块NuttX I2C驱动源码
+- 语音模块NSH测试应用源码
+- apps/testing/cmocka/中的ok8mp_voice测试用例
+- nuttx/boards/arm/mx8mp/ok8mp-m7/中的I2C3时钟及IOMUX配置
+
+四、原始证据来源
+- xts测试.txt第1837～1878行及2216～2227行；配套蓝灯视频
+
+六、原始测试记录
+nsh> i2c bus
+ BUS   EXISTS?
+Bus 1: NO
+Bus 2: NO
+Bus 3: YES
+Bus 4: NO
+Bus 5: NO
+Bus 6: NO
+
+nsh> i2c get -b 3 -a 0x0f -r 0x0b
+READ Bus: 3 Addr: 0f Subaddr: 0b Value: 01
+
+nsh> voice
+version: 0x01 (1)
+busy: 0x00 (0)
+word_count: 0x05 (5)
+result: 0xff (255)
+
+nsh> voice rgb 0 0 255
+rgb set to 0,0,255
+
+nsh> voice rgb 0 0 0
+rgb set to 0,0,0
+
+nsh> ifconfig
+eth0    Link encap:Ethernet HWaddr f2:10:26:a2
+        inet addr:192.168.2.2 DRaddr:192.168.0
+
+nsh> route ipv4
+SEQ   TARGET          NETMASK         ROUTER
+   1. 0.0.0.0         0.0.0.0         192.168
+nsh> ping -c 3 1.1.1.1
+PING 1.1.1.1 56 bytes of data
+56 bytes from 1.1.1.1: icmp_seq=0 time=100.0 s
+56 bytes from 1.1.1.1: icmp_seq=1 time=30.0 ms
+56 bytes from 1.1.1.1: icmp_seq=2 time=60.0 ms
+3 packets transmitted, 3 received, 0% packet s
+rtt min/avg/max/mdev = 30.000/63.333/100.000/s
+nsh> nslookup api.deepseek.com
+Host: api.deepseek.com Addr: 43.141.68.41
+
+nsh> cmocka --suite ok8mp_voice
+Cmocka Test Start.
+[==========] tests: Running 2 test(s).
+[ RUN      ] ok8mp_voice_read_status
+voice status: version=0x01 busy=0 count=5 res0
+[       OK ] ok8mp_voice_read_status
+[ RUN      ] ok8mp_voice_set_rgb
+voice RGB write: blue (0,0,255)
+[       OK ] ok8mp_voice_set_rgb
+[==========] tests: 2 test(s) run.
+[  PASSED  ] 2 test(s).
+Cmocka Test Completed.

@@ -1,0 +1,28 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_OK8MP_TIMER_TEST
+	tristate "OK8MP M7 timer tick test"
+	default n
+	---help---
+		Enable the OK8MP M7 timer test command. The command periodically
+		prints CLOCK_MONOTONIC timestamps to verify system timer ticks and
+		task sleep scheduling.
+
+if EXAMPLES_OK8MP_TIMER_TEST
+
+config EXAMPLES_OK8MP_TIMER_TEST_PROGNAME
+	string "Program name"
+	default "timer_test"
+
+config EXAMPLES_OK8MP_TIMER_TEST_PRIORITY
+	int "Timer test command task priority"
+	default 100
+
+config EXAMPLES_OK8MP_TIMER_TEST_STACKSIZE
+	int "Timer test command stack size"
+	default DEFAULT_TASK_STACKSIZE
+
+endif
