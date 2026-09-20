@@ -20,7 +20,7 @@ app/ok8mp_m7_services/            项目应用覆盖代码、Agent 覆盖代码�
 docs/                             平台移植、源码集成、构建上板和 CAN 实板验证文档
 test-results/nsh-can/             本次 NSH/CAN 功能验收记录
 tests/xts/                        XTS 测试记录
-firmware/                         已验证的 CAN/ISO-TP/UDS/OBD-II 镜像及 SHA-256
+firmware/                         已验证的基线镜像、CAN 诊断镜像及 SHA-256
 videos/                          实机演示视频《演示720.mp4》
 submission/                       《随机应队_2026 首届 openvela AI 硬件开发者大赛》项目说明书
 logs/                             官方 AI Coding 日志目录，保留给按组委会工具导出的真实记录
@@ -30,7 +30,7 @@ logs/                             官方 AI Coding 日志目录，保留给按�
 
 1. 按大赛说明在 openvela 工作区根目录完成 `repo init` 和 `repo sync`。本仓的 manifest 将 `board/ok8mp_m7_openvela` 映射到 `vendor/openvela/boards/contest2026_500_ok8mp_m7_openvela`，将 `app/ok8mp_m7_services` 映射到 `packages/demos/contest2026_500_ok8mp_m7_services`。
 2. 阅读 [docs/源码集成说明.md](docs/源码集成说明.md)，将 `port_snapshot` 和 `overlays` 中的快照按原始相对路径集成到完整 openvela 工作树。该步骤保留了队伍仓和公共仓的边界。
-3. 已验证发布镜像为 `firmware/nuttx-ok8mp-m7-can-uds-obd-tested.bin`，SHA-256 为 `1c3a6baaf3b4fb7ddf00fe9b5c345f6971704a77380eb6a8dd464f77a1a592a5`。传输、U-Boot 启动和 NSH 验收命令见 [docs/操作手册.md](docs/操作手册.md)。
+3. 仓库提供两份已验证镜像。`firmware/nuttx-ok8mp-m7-openvela-baseline-tested.bin` 是原项目的基线镜像，覆盖系统启动、语音模块、uORB、安全网络和 AI Agent 基础功能，SHA-256 为 `02ffb2a7ad8ee94da7542b1ca41b369f566e047fe90051331de3078667f73a2d`；`firmware/nuttx-ok8mp-m7-can-uds-obd-tested.bin` 用于 CAN/ISO-TP/UDS/OBD-II 实板测试，SHA-256 为 `1c3a6baaf3b4fb7ddf00fe9b5c345f6971704a77380eb6a8dd464f77a1a592a5`。传输、U-Boot 启动和 NSH 验收命令见 [docs/操作手册.md](docs/操作手册.md)。
 4. CAN 台架的 ESP32-S3 固件位于 `app/ok8mp_m7_services/esp32_can_ecu/`。完整接线、PlatformIO 烧录和诊断协议见 [docs/OK8MP_M7_CAN通信与实板验证.md](docs/OK8MP_M7_CAN通信与实板验证.md)。
 
 ## AI Coding 使用说明
